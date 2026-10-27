@@ -53,3 +53,10 @@ llama-server uses the Mac's GPU by default, so the LLM numbers will be slower on
 - **Not streaming.** STT runs once the speaker stops and TTS runs one sentence at a time, so a reply starts
   after roughly STT + LLM first sentence + TTS of that sentence.
 - **Small LLM.** A 1B model gets facts wrong. Set `LLM_URL` to a larger model when quality matters more than size.
+
+## Built from scratch
+
+[scratch/](scratch/) builds the same four parts by hand to learn how each works inside: a 12 M parameter LLM,
+a 4.6 M Conformer + CTC speech recognizer, a FastSpeech / flow-matching TTS with a Vocos vocoder, and a mini
+voice-agent orchestrator (VAD, end-of-turn, streaming, barge-in). Each module has measured results, a glossary
+and tests.
