@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Awaaz AI: shuru se</title>
+{{STYLE}}
+<style>
+.cover { background: linear-gradient(155deg, #2a1206 0%, #8a3412 45%, #eb6834 100%); }
+.cover .tag, .cover h1 span { color: #ffd2b8; } .cover .sub { color: #fff1e8; } .cover .tile span, .cover .foot { color: #ffe0cc; }
+.part { break-before: page; height: 250mm; display: flex; flex-direction: column; justify-content: center; padding: 0 8mm; }
+.part .pn { font: 600 11pt "Avenir Next", sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); }
+.part h2 { font-size: 36pt; margin: 3mm 0 5mm; }
+.part p { font-size: 13pt; color: var(--sec); max-width: 140mm; }
+.part ul { list-style: none; padding: 0; margin-top: 6mm; } .part li { font-size: 12pt; padding: 2mm 0; border-bottom: 1px solid var(--line); }
+.part li b { display: inline-block; width: 12mm; color: var(--orange); }
+.ladder li { padding: .55mm 3mm; margin-bottom: .8mm; font-size: 9.4pt; } .ladder b { width: 6.5mm; height: 6.5mm; }
+section.flow { margin-top: 10mm; }
+.part + section.flow { margin-top: 0; }
+.calc { background: #eef6ff; border: 1.5px solid #9ec5f4; border-radius: 10px; padding: 3.5mm 4.5mm; margin: 3.5mm 0; break-inside: avoid; }
+.calc .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-d); display: block; margin-bottom: 1.5mm; }
+.calc p { margin: 0 0 1.5mm; } .calc p:last-child { margin: 0; }
+.calc code { background: #fff; }
+.myth { background: #fdeee7; border-radius: 10px; padding: 3mm 4.5mm; margin: 3.5mm 0; break-inside: avoid; font-size: 9.8pt; }
+.myth .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #a8431b; display: block; margin-bottom: 1mm; }
+.recap { background: var(--navy); color: #eef4fc; border-radius: 12px; padding: 4mm 5mm; margin: 4mm 0; break-inside: avoid; }
+.recap .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #ffd2b8; display: block; margin-bottom: 1.5mm; }
+.recap ol { margin: 0; padding-left: 5mm; } .recap li { margin-bottom: 1mm; }
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 3mm 0; }
+.cmp div { border-radius: 10px; padding: 3mm 4mm; font-size: 9.6pt; break-inside: avoid; }
+.cmp .bad { background: #fdeee7; } .cmp .good2 { background: #e3f6ee; }
+.cmp b { display: block; font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1mm; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tag">Bilkul shuruaat se · koi pehle ka gyaan nahi chahiye</div>
+  <h1>Awaaz AI:<br><span>shuru se, interview tak.</span></h1>
+  <div class="sub">Machine sunti kaise hai, bolti kaise hai, aur baat-cheet kaise sambhalti hai. 21 seedhiyan, har ek pichhli pe khadi. Har seedhi pe ek kahani, ek tasveer, ek hisaab jo tum kaagaz pe khud karoge, sawaal jo tum khud se poochoge, aur wo line jo interview mein bolni hai.</div>
+  <div class="tiles">
+    <div class="tile"><b>21</b><span>seedhiyan: awaaz se interview tak</span></div>
+    <div class="tile"><b>16</b><span>hisaab haath se, chhote numbers ke saath</span></div>
+    <div class="tile"><b>60+</b><span>khud-se-poocho sawaal, jawab ke saath</span></div>
+  </div>
+  <div class="foot"><span>own-voice-models / scratch</span><span>Saare asli numbers isi project ke models se hain</span></div>
+</div>
+
+<main>
+
+<section class="page">
+  <h2>Pehle ye padho</h2>
+  <p class="lead">Ye guide padhne ke liye hai, code ke liye nahi. Har seedhi chadho, koi mat chhodo: har ek pichhli pe tiki hai. Jahan atko, wahin ruko aur us seedhi ka hisaab kaagaz pe khud karo.</p>
+  <ul class="ladder">
+    <li><b>0</b>Machine seekhti kaise hai (10 minute mein)<span>knob, loss, softmax</span></li>
+    <li><b>1</b>Awaaz kya hai<span>lehar, sample, sampling rate</span></li>
+    <li><b>2</b>Ek awaaz mein kai sur<span>frequency, Fourier</span></li>
+    <li><b>3</b>Awaaz ki tasveer<span>frame, spectrogram</span></li>
+    <li><b>4</b>Kaan jaisa sunna<span>mel, log, decibel</span></li>
+    <li><b>5</b>STT ka kaam: har pal kaunsa akshar?<span>frame, probability</span></li>
+    <li><b>6</b>Kaunsa akshar kab bola? Kisi ne nahi bataya<span>alignment, CTC, blank</span></li>
+    <li><b>7</b>Probability se text<span>greedy, beam search</span></li>
+    <li><b>8</b>STT model andar se<span>subsampling, convolution, attention</span></li>
+    <li><b>9</b>Training aur naap<span>WER, CER, overfitting</span></li>
+    <li><b>10</b>Bolna sunne se mushkil kyun<span>phase, one-to-many</span></li>
+    <li><b>11</b>Machine text kaise padhti hai<span>punctuation, schwa, bhasha</span></li>
+    <li><b>12</b>Har akshar kitna lamba?<span>duration, MAS</span></li>
+    <li><b>13</b>Text se tasveer<span>length regulator, decoder</span></li>
+    <li><b>14</b>Tasveer se awaaz<span>vocoder, distillation</span></li>
+    <li><b>15</b>Teen models, ek baat-cheet<span>pipeline, candidate ka safar</span></li>
+    <li><b>16</b>Koi bol raha hai?<span>VAD, noise floor</span></li>
+    <li><b>17</b>Baat poori hui ya nahi?<span>turn detection</span></li>
+    <li><b>18</b>Jaldi jawab kaise<span>streaming, latency</span></li>
+    <li><b>19</b>Beech mein tokna<span>barge-in, state machine</span></li>
+    <li><b>20</b>Interview mein jawab kaise do<span>pitch, dhaancha, sachchai</span></li>
+  </ul>
+  <p style="font-size:9.6pt;color:#52514e">Har seedhi mein: <b style="color:#8a6200">Kahani</b> (rozmarra ki misaal) · <b style="color:#184f95">Haath se hisaab</b> (pen uthao) · <b>Khud se poocho</b> (jawab dhak ke socho) · <b>Interview mein bolo</b> (English line).</p>
+  <div class="box warn"><span class="k">LLM ke baare mein</span><p>LLM (text likhne wala model) ki apni 10 seedhiyan alag PDF mein hain: <code>llm/docs/LLM-Zero-Se-Interview-Tak.pdf</code>. Seedhi 0 yahan sirf utna deti hai jitna awaaz samajhne ke liye chahiye. Pehle wo PDF, phir ye: sabse accha kram.</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 1</div><h2>Neenv</h2><p>Ek hi seedhi: machine "seekhti" kaise hai. Aage ke saare models (sunna, bolna) isi ek tareeke se seekhte hain.</p></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">0</div><div><h2>Machine seekhti kaise hai</h2><div class="file">seedhi 0 · poori kahani LLM wali guide ki seedhi 0-2 mein</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek radio jisme hazaaron knob hain. Shuru mein sab random ghume hue hain, to sirf shor aata hai. Tum har knob ko thoda-thoda ghumate ho aur sunte ho: awaaz behtar hui ya kharab? Behtar hui to usi taraf aur ghumao. Hazaaron baar karne ke baad gaana saaf aane lagta hai. Machine learning bilkul yahi hai.</p></div>
+  <figure>{{MACHINE}}</figure>
+  <table class="words">
+    <thead><tr><th>Shabd</th><th>Seedhi bhasha mein</th></tr></thead>
+    <tbody>
+      <tr><td>Parameter / weight</td><td>Ek knob. Ek number jo model seekhta hai.</td></tr>
+      <tr><td>Loss</td><td>Ek number jo batata hai jawab kitna galat tha. Kam = accha.</td></tr>
+      <tr><td>Gradient</td><td>Har knob ke liye: "is taraf ghumaoge to loss kitna ghatega".</td></tr>
+      <tr><td>Training</td><td>Baar-baar: jawab do, loss naapo, har knob ko gradient ke hisaab se thoda ghumao.</td></tr>
+      <tr><td>Softmax</td><td>Model ke kachche scores ko probabilities (0 se 1, jod = 1) mein badalna.</td></tr>
+    </tbody>
+  </table>
+  <figure><div class="fig-t">Training ka chakkar (LLM ka udaharan; STT aur TTS mein bhi yahi)</div>{{LOOP}}</figure>
+  <div class="calc"><span class="k">Haath se hisaab: softmax</span>
+    <p>Model teen aksharon ko scores deta hai: <code>k = 2</code>, <code>a = 1</code>, <code>l = 0</code>. Inhe probability banao.</p>
+    <p><b>1.</b> Har score ka e<sup>x</sup> lo: e<sup>2</sup> = 7.39, e<sup>1</sup> = 2.72, e<sup>0</sup> = 1. &nbsp;<b>2.</b> Jodo: 7.39 + 2.72 + 1 = 11.11. &nbsp;<b>3.</b> Har ek ko jod se bhaag do: <b>k = 0.665, a = 0.245, l = 0.090</b>. Jod = 1.</p>
+    <p>Model kehta hai: "66% chance hai ye 'k' hai". STT har 40 ms pe yahi karta hai, 117 aksharon ke liye.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Loss 2.0 se 0.5 ho gaya. Model behtar hua ya kharab? <i>Behtar. Loss = galti; kam galti = accha.</i></p>
+    <p><b>2.</b> Softmax ke baad saari probabilities ka jod kitna hota hai? <i>Hamesha 1.</i></p>
+    <p><b>3.</b> Model "seekhta" hai, iska asli matlab kya hai? <i>Uske knobs (numbers) aise badalte hain ki loss kam ho jaaye. Andar koi samajh ya niyam nahi likha jaata.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"A model is a function with learnable parameters. Training runs a forward pass, measures a loss, backpropagates to get gradients, and nudges each parameter against its gradient. Softmax turns the final scores into probabilities."</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 2</div><h2>Awaaz</h2><p>Mic se aaye numbers ko ek aisi tasveer mein badalna jisme "a" aur "k" dikhne lagein. STT aur TTS dono isi tasveer pe khade hain.</p>
+  <ul><li><b>1</b>Awaaz kya hai</li><li><b>2</b>Ek awaaz mein kai sur</li><li><b>3</b>Awaaz ki tasveer</li><li><b>4</b>Kaan jaisa sunna</li></ul></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">1</div><div><h2>Awaaz kya hai</h2><div class="file">seedhi 1 · lehar, sample, sampling rate</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Talaab mein pathar phenko to lehrein uthti hain. Bolte waqt tumhara gala hawa mein aisi hi lehrein banata hai. Mic ek chowkidaar hai jo har second hazaaron baar likhta hai ki hawa abhi kitni dabi hai. Wahi numbers ki lambi list computer ke liye "awaaz" hai.</p></div>
+  <figure><div class="fig-t">Lehar aur uske samples</div>{{SAMPLING}}</figure>
+  <p><b>Sample</b> = ek number, ek pal ka dabaav (-1 se 1 ke beech). <b>Sampling rate</b> = ek second mein kitne samples. Hamara STT 16,000 leta hai (16 kHz), TTS 22,050 banata hai.</p>
+  <p><b>Kyun 16,000?</b> Ek niyam hai (Nyquist): jitne samples per second, usse <b>aadhi</b> frequency tak ka sur pakda ja sakta hai. 16,000 → 8,000 Hz tak. Bolne ki zyada-tar jaankari 8 kHz ke neeche hai, isliye sunne ke liye kaafi. Phone call 8,000 pe chalti hai (sirf 4 kHz tak), isliye phone pe awaaz dabbi si lagti hai aur STT ke liye mushkil hoti hai.</p>
+  <div class="calc"><span class="k">Haath se hisaab</span>
+    <p><b>1.</b> 3 second ki awaaz, 16 kHz pe: 3 × 16,000 = <b>48,000 numbers</b>.</p>
+    <p><b>2.</b> 22,050 Hz pe sabse oonchi frequency: 22,050 ÷ 2 = <b>11,025 Hz</b>. Isliye TTS ki awaaz mein "s" aur "sh" ki chamak bhi bachti hai.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> 5 second, 16 kHz: kitne samples? <i>80,000.</i></p>
+    <p><b>2.</b> Phone (8 kHz) pe kitni oonchi frequency tak sunai degi? <i>4,000 Hz.</i></p>
+    <p><b>3.</b> Sirf numbers ki list dekh ke kya pata chalega ki "a" bola ya "k"? <i>Nahi. Isliye agli seedhiyan: tasveer badalni padti hai.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Audio is a sequence of samples. I use 16 kHz for recognition, which captures speech up to 8 kHz by the Nyquist limit, and 22.05 kHz for synthesis so the output keeps high-frequency detail."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">2</div><div><h2>Ek awaaz mein kai sur</h2><div class="file">seedhi 2 · frequency, Fourier transform</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Harmonium pe ek saath do keys dabao. Kaan ko ek awaaz sunai deti hai, par andar do sur hain: ek mota, ek patla. Kaan unhe alag pehchaan leta hai. Fourier transform machine ko yahi taaqat deta hai: ek gadbad lehar mein se batana ki andar kaunse sur kitne zor se baj rahe hain.</p></div>
+  <figure><div class="fig-t">Do saaf sur jud ke ek gadbad lehar; Fourier unhe wapas alag karta hai</div>{{SINES}}</figure>
+  <p><b>Frequency</b> = lehar ek second mein kitni baar upar-neeche hoti hai (Hertz, Hz). Mota sur = kam frequency, patla sur = zyada.</p>
+  <p><b>Ye zaroori kyun hai:</b> har swar (a, i, u) ki pehchaan uske andar ke suron ke mel se hai. "a" bolo to kuch khaas frequencies zor se bajti hain, "i" bolo to doosri. Lehar mein ye chhupa hai; Fourier ke baad saaf dikhta hai.</p>
+  <div class="myth"><span class="k">Galatfehmi</span><p>"Fourier se awaaz badal jaati hai." Nahi. Wahi awaaz, bas doosre tareeke se likhi hui: "har pal ka dabaav" ki jagah "har sur kitna zor se". Jaankari wahi hai.</p></div>
+  <div class="calc"><span class="k">Haath se hisaab</span>
+    <p>Ek lehar 1 second mein 200 baar oopar-neeche hoti hai: frequency = <b>200 Hz</b>. Doosri 600 baar: <b>600 Hz</b>, yaani pehli se teen guna patli.</p>
+    <p>Hamara STT 400 samples ke tukde pe Fourier lagata hai. Usse 400 ÷ 2 + 1 = <b>201 "khaane"</b> (frequency bins) milte hain, har khaana 16,000 ÷ 400 = <b>40 Hz</b> chauda.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Mard ki awaaz aksar aurat se moti kyun lagti hai? <i>Uski buniyaadi frequency (pitch) kam hoti hai, jaise 120 Hz banam 220 Hz.</i></p>
+    <p><b>2.</b> Fourier transform ka output kya batata hai? <i>Kaunsi frequency kitni zor se maujood hai.</i></p>
+    <p><b>3.</b> Bin ki chaudai 40 Hz hai. 440 Hz ka sur kaunse bin mein aayega? <i>440 ÷ 40 = 11, yaani bin 11.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The Fourier transform rewrites a signal as the frequencies it contains. Phonemes are distinguished by which frequencies are strong, so speech models work on frequency content rather than raw samples."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">3</div><div><h2>Awaaz ki tasveer</h2><div class="file">seedhi 3 · frame, hop, spectrogram</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek film 24 photos har second hai. Har photo ek pal ko pakad leti hai. Awaaz ke saath bhi yahi karte hain: 25 millisecond ke chhote tukde (frames), aur har tukde ka Fourier. Saare tukdon ko ek ke baad ek rakho to ek tasveer banti hai: samay baayein se daayein, frequency neeche se upar. Yahi spectrogram hai.</p></div>
+  <figure><div class="fig-t">Chhote, ek doosre pe chadhe tukde</div>{{FRAMES}}</figure>
+  <figure><div class="fig-t">Asli Hindi clip ki tasveer (gehra = zor se)</div>{{MEL}}</figure>
+  <p><b>25 ms kyun?</b> Itne chhote tukde mein awaaz lagbhag "ek jaisi" rehti hai. <b>Hop 10 ms kyun?</b> Har 10 ms pe naya tukda, taaki koi pal chhoot na jaaye: 100 tukde har second. <b>Window</b>: har tukde ke kinaare dheere se zero karte hain (Hann window), warna kata hua kinara jhoothi frequencies dikhata hai.</p>
+  <div class="calc"><span class="k">Haath se hisaab</span>
+    <p><b>1.</b> 25 ms, 16 kHz pe: 16,000 × 0.025 = <b>400 samples</b> ek frame mein. 10 ms: <b>160 samples</b> ka hop.</p>
+    <p><b>2.</b> 3 second ki clip mein kitne frames? 48,000 ÷ 160 = 300, aur ek shuru wala: <b>301 frames</b>. Har frame ke 201 numbers: tasveer 301 × 201 ki.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Spectrogram mein ek khada (vertical) patta kya hai? <i>Ek pal (ek frame) ki saari frequencies.</i></p>
+    <p><b>2.</b> Frames ek doosre pe kyun chadhe hain? <i>25 ms lambe hain par 10 ms pe naye aate hain, taaki beech ka koi pal na chhoote.</i></p>
+    <p><b>3.</b> 10 second ki clip: kitne frames? <i>Lagbhag 1,000 (100 har second).</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"I compute a short-time Fourier transform: 25 millisecond Hann windows every 10 milliseconds, so 100 frames per second. Stacked over time, the magnitudes form the spectrogram."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">4</div><div><h2>Kaan jaisa sunna</h2><div class="file">seedhi 4 · mel scale, log, decibel</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Tumhara kaan 100 Hz aur 200 Hz mein fark turant sun leta hai, par 7,100 aur 7,200 mein mushkil se. Aur do guni zor ki awaaz do guni nahi, bas "thodi zyada" lagti hai. Machine ko bhi kaan jaisa sunna sikhate hain: neeche ki frequencies baareeki se, upar ki moti pattiyon mein, aur zor ko log mein.</p></div>
+  <figure><div class="fig-t">Mel filterbank: 201 khaanon ko kaan jaisi pattiyon mein samatna</div>{{MELBANK}}</figure>
+  <p><b>Mel scale</b>: kaan jaisa frequency ka paimana. 201 khaanon ko 80 triangle-pattiyon mein jodte hain: neeche patle triangle, upar chaude. <b>Log</b>: zor ka log lete hain, kyunki kaan anupaat sunta hai, antar nahi. Nateeja: <b>log-mel spectrogram</b>, (frames × 80) ki tasveer. STT ka input aur TTS ka output yahi hai.</p>
+  <div class="calc"><span class="k">Haath se hisaab: mel</span>
+    <p>Formula: mel = 2595 × log<sub>10</sub>(1 + Hz ÷ 700). &nbsp;1,000 Hz → <b>1,000 mel</b>. &nbsp;2,000 Hz → <b>1,521</b>. &nbsp;4,000 Hz → <b>2,146</b>. &nbsp;8,000 Hz → <b>2,840</b>.</p>
+    <p>Dekho: pehle 1,000 Hz ko 1,000 mel mile, par aakhri 4,000 Hz (4k se 8k) ko sirf 694. Upar ki frequencies dabaai gayi hain, bilkul kaan ki tarah.</p>
+  </div>
+  <div class="calc"><span class="k">Haath se hisaab: decibel</span>
+    <p>dB = 10 × log<sub>10</sub>(energy ka anupaat). 10 guna energy = <b>+10 dB</b>. 100 guna = <b>+20 dB</b>. 2 guna = <b>+3 dB</b>. Isliye log: bahut bade fark chhote numbers ban jaate hain.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Mel triangles upar ki taraf chaude kyun hote hain? <i>Kaan upar ki frequencies mein baareek fark nahi sunta, to unhe mota-mota jodna kaafi hai.</i></p>
+    <p><b>2.</b> 1,000 guna zyada energy kitne dB hai? <i>30 dB.</i></p>
+    <p><b>3.</b> STT model ka input exact kya hai? <i>80-band log-mel spectrogram, 100 frames har second.</i></p>
+  </div>
+  <div class="recap"><span class="k">Bhaag 2 ek saans mein</span><ol>
+    <li>Awaaz = samples ki list (16,000 har second).</li>
+    <li>25 ms ke tukde, har 10 ms pe; har tukde ka Fourier.</li>
+    <li>201 frequencies → 80 mel pattiyan → log.</li>
+    <li>Nateeja: log-mel spectrogram, awaaz ki tasveer.</li></ol></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Mel filterbanks space frequency bands the way human hearing does, and the log matches how we perceive loudness. The 80-band log-mel spectrogram is the standard input for speech recognition and the standard output of TTS acoustic models."</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 3</div><h2>Sunna: STT</h2><p>Awaaz ki tasveer se likha hua text. Speech-to-text, yaani ASR (automatic speech recognition).</p>
+  <ul><li><b>5</b>STT ka kaam</li><li><b>6</b>CTC: kaunsa akshar kab</li><li><b>7</b>Probability se text</li><li><b>8</b>Model andar se</li><li><b>9</b>Training aur naap</li></ul></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">5</div><div><h2>STT ka kaam: har pal kaunsa akshar?</h2><div class="file">seedhi 5 · frame, character, probability</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek film ko frame-dar-frame dekho aur har frame ke neeche likho: "is pal kya bola ja raha hai". Kabhi "k", kabhi "a", aur aksar "kuch naya nahi" (chuppi ya kisi aawaz ka beech). STT model yahi karta hai: har 40 ms ke liye har akshar ki probability.</p></div>
+  <figure><div class="fig-t">"kal" bolte waqt model kya nikalta hai (samjhane ke liye banaye numbers)</div>{{FRAMEPROBS}}</figure>
+  <p><b>Akshar, shabd nahi.</b> Model ek-ek akshar (character) likhta hai. Hindi, Marathi aur English milake 117 symbols hain (ek "blank" ke saath). Shabd lakhon hain; akshar kam hain, to har akshar training mein baar-baar dikhta hai.</p>
+  <p><b>Devanagari ka ek raaz:</b> "कि" do symbols hai: क aur ि (matra). Isliye model क, कि, की, कु sab ek hi क se bana leta hai.</p>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Model ek frame ke liye kya nikalta hai? <i>Har akshar (aur blank) ki probability; jod 1.</i></p>
+    <p><b>2.</b> Shabdon ki jagah akshar kyun? <i>Akshar kam hain to har ek bahut baar dikhta hai; naya shabd bhi akshar jod ke likha ja sakta hai.</i></p>
+    <p><b>3.</b> "कु" kitne symbols hai? <i>Do: क aur ु.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The recognizer outputs, for every 40 millisecond frame, a probability distribution over 117 characters plus a blank. Characters suit small data: the vocabulary is tiny and any word can be spelled."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">6</div><div><h2>Kaunsa akshar kab bola? Kisi ne nahi bataya</h2><div class="file">seedhi 6 · alignment problem, CTC, blank</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Tumhe ek gaana aur uske bol diye gaye, par ye nahi bataya ki kaunsa shabd kis second pe aata hai. Training data aisa hi hai: 5 second ki awaaz (125 frames) aur 40 akshar ka text. Kaunsa frame kis akshar ka? Kisi ne nahi likha, aur likhna bahut mehenga hai. CTC kehta hai: <b>mat batao, main saare sambhav tareeke jod lunga.</b></p></div>
+  <h3>Do niyam (yaad kar lo)</h3>
+  <div class="eq">h h - e - l l - l - o &nbsp;→ <small>(1) dohraye ek karo</small> → &nbsp;h - e - l - l - o &nbsp;→ <small>(2) blank hatao</small> → &nbsp;hello</div>
+  <p><b>Blank (-)</b> ke do kaam: <b>(1)</b> "is pal kuch naya nahi". <b>(2)</b> asli double akshar ko bachana: "l - l" do l rehte hain, "l l" ek ban jaata hai.</p>
+  <figure><div class="fig-t">"hi" ka ek raasta, 7 frames mein</div>{{CTC}}</figure>
+  <div class="calc"><span class="k">Haath se hisaab: CTC loss</span>
+    <p>2 frames. Har frame mein: blank 0.6, "a" 0.4. Sahi text "a" hai. Saare raaste likho:</p>
+    <p><code>- -</code> → "" (0.6 × 0.6 = 0.36) &nbsp; <code>- a</code> → "a" (0.24) &nbsp; <code>a -</code> → "a" (0.24) &nbsp; <code>a a</code> → "a" (0.16)</p>
+    <p>P("a") = 0.24 + 0.24 + 0.16 = <b>0.64</b>. &nbsp;CTC loss = −ln(0.64) = <b>0.446</b>. Training is loss ko ghatati hai, yaani sahi text ke saare raaston ki probability badhati hai.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> <code>a a - a</code> collapse karo. <i>"aa" (pehle a a → a, phir a - a → blank hatao → aa).</i></p>
+    <p><b>2.</b> <code>b - - b b</code> collapse karo. <i>"bb".</i></p>
+    <p><b>3.</b> Blank na hota to "kitta" kaise likhte? <i>Nahi likh paate: "tt" hamesha ek "t" ban jaata. Beech ka blank hi do t bachata hai.</i></p>
+    <p><b>4.</b> CTC kaunsi problem hal karta hai? <i>Frame-level labels ke bina training (alignment problem).</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"CTC solves the alignment problem. The model emits a symbol or a blank per frame; repeats are merged and blanks removed. The loss sums the probability of every path that collapses to the transcript, computed efficiently with dynamic programming, the forward algorithm."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">7</div><div><h2>Probability se text</h2><div class="file">seedhi 7 · greedy decoding, beam search</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ghar jaane ke kai raaste hain. Greedy wo hai jo har mod pe sabse acchi dikhne wali gali le leta hai. Beam search kuch raaste saath-saath zinda rakhta hai aur aakhir mein dekhta hai ki <b>kaunsi manzil</b> sabse sambhav thi, chahe wahan pahunchne ke kai chhote-chhote raaste hon.</p></div>
+  <div class="calc"><span class="k">Haath se hisaab: greedy galat kab hota hai</span>
+    <p>Wahi 2 frames (blank 0.6, "a" 0.4). <b>Greedy</b>: har frame mein sabse bada = blank, blank → text = "" (khaali).</p>
+    <p><b>Beam search</b>: text "" ki probability 0.36, text "a" ki 0.64 (teen raaste jud ke). Sabse sambhav <b>text</b> = "a". Greedy galat tha.</p>
+    <p>Sabak: sabse accha <b>raasta</b> aur sabse accha <b>text</b> ek nahi hote.</p>
+  </div>
+  <p><b>Asli zindagi mein:</b> hamare model pe beam search ne greedy se thoda hi sudhaar diya (Hindi CER 0.333 → 0.330). Bada fark tab aata hai jab beam ke saath ek language model jodo jo spelling aur grammar jaanta ho.</p>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Greedy decoding kya karta hai? <i>Har frame ka sabse sambhav symbol, phir collapse ke do niyam.</i></p>
+    <p><b>2.</b> Beam search paths rakhta hai ya texts? <i>Texts (prefixes), aur har text ke saare raaston ki probability jodta hai.</i></p>
+    <p><b>3.</b> Beam width 8 ka matlab? <i>Har frame ke baad 8 sabse acche adhoore texts zinda rakho.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Greedy CTC decoding takes the best symbol per frame. Prefix beam search keeps the top partial transcripts and sums the paths that collapse to each, because the most likely path is not always the most likely text. Adding a language model to the beam is the usual next gain."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">8</div><div><h2>STT model andar se</h2><div class="file">seedhi 8 · subsampling, convolution, attention, encoder-only</div></div></div>
+  <div class="cols2">
+    <figure><div class="fig-t">Hamara model: {{P_STT}} knobs</div>{{STT_ARCH}}</figure>
+    <div>
+      <div class="story"><span class="k">Kahani</span><p>Ek clerk film ki har 4 frame mein se 1 dekhta hai (subsampling). Phir har frame ke liye do kaam: <b>aas-paas</b> dekhna (convolution: "ye 'k' ki shakal hai") aur <b>poori film</b> mein jhaankna (attention: "aage 'kal' aa raha hai, to ye 'k' hi hoga").</p></div>
+      <div class="box simple"><span class="k">Encoder-only</span><p>LLM ek-ek token likhta tha aur sirf peeche dekhta tha. STT model poora clip ek saath dekhta hai (aage-peeche dono) aur saare frames ek hi baar mein nikalta hai. Koi loop nahi, isliye tez.</p></div>
+    </div>
+  </div>
+  <div class="calc"><span class="k">Haath se hisaab: kitna ghata sakte hain?</span>
+    <p>100 frames/sec ÷ 4 = <b>25 frames/sec</b> (har frame 40 ms). Hindi bolne wale lagbhag <b>10.7 akshar/sec</b> bolte hain (hamare data mein naapa). Yaani har akshar ko ~2.3 frames.</p>
+    <p>8 guna ghataate to 12.5 frames/sec bachte. Tez bolne wale 14 akshar/sec bolte hain, aur CTC ko har akshar ke liye kam se kam ek frame chahiye (double akshar ke beech blank bhi). Bahut clips <b>namumkin</b> ho jaate. Isliye 4.</p>
+  </div>
+  <table class="words">
+    <thead><tr><th>Hissa</th><th>Kya karta hai</th></tr></thead>
+    <tbody>
+      <tr><td>Normalize</td><td>Har mel band ko ausat 0, failaav 1 pe laana, taaki sab barabar shuru karein.</td></tr>
+      <tr><td>SpecAugment</td><td>Training mein tasveer ki kuch pattiyan random chhupa dena, taaki model ek sanket pe na tike.</td></tr>
+      <tr><td>Convolution</td><td>Paas ke 15 frames (0.6 s) dekh ke local pattern pakadna.</td></tr>
+      <tr><td>Attention</td><td>Poore clip mein kaam ke frames dhoondhna (LLM wala hi attention, bina causal mask).</td></tr>
+      <tr><td>Padding mask</td><td>Batch mein chhote clips ke peeche khaali jagah ko model kabhi na dekhe.</td></tr>
+    </tbody>
+  </table>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Convolution aur attention mein fark? <i>Convolution paas-paas dekhta hai (local), attention poora clip (global).</i></p>
+    <p><b>2.</b> STT mein causal mask kyun nahi? <i>Poori recording pehle se maujood hai; aage dekhna dhokha nahi, madad hai.</i></p>
+    <p><b>3.</b> SpecAugment training mein on, test mein? <i>Off. Ye sirf seekhte waqt ki mushkil hai.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It is a Conformer-style encoder: a convolutional front-end subsamples 100 frames per second to 25, then blocks of self-attention for global context and depthwise convolution for local patterns, and a CTC head. SpecAugment is the main regulariser."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">9</div><div><h2>Training aur naap</h2><div class="file">seedhi 9 · WER, CER, overfitting, asli nateeje</div></div></div>
+  <figure><div class="fig-t">Training ke dauraan dev CER (neeche = behtar)</div>{{STT_CURVE}}</figure>
+  <div class="calc"><span class="k">Haath se hisaab: WER</span>
+    <p>Asli: <code>kal mujhe dilli jaana hai</code> (5 shabd). Model: <code>kal mujhe dili jaana</code>.</p>
+    <p>Galtiyan: "dilli" → "dili" (<b>1 badla</b>), "hai" gaayab (<b>1 chhoota</b>). WER = 2 ÷ 5 = <b>0.40</b>, yaani 40%.</p>
+    <p><b>CER</b> wahi hisaab aksharon pe. "dili" mein sirf ek akshar ki galti hai, to CER bahut kam aata hai. Lambe shabdon wali bhasha (Marathi) mein CER zyada nyaay karta hai.</p>
+  </div>
+  <div class="cols2">
+    <div class="story"><span class="k">Jo galat gaya</span><p>Pehli training mein model ne sasta dhokha seekh liya: "hamesha blank bolo". CER 0.78 pe atak gaya (<b>blank plateau</b>). Learning rate ko dheere badhaya (lamba warmup), to plateau toot gaya.</p></div>
+    <div class="box good"><span class="k">Pehle overfit test</span><p>Badi training se pehle model ko sirf 16 clips ratwaye. CER 0.000 aaya: pipeline sahi judi hai. Na ratta to bug hota, data nahi.</p></div>
+  </div>
+  <h3>Asli nateeje: test clips jo model ne kabhi nahi dekhe</h3>
+  {{STT_TEST}}
+  <div class="box good"><span class="k">Data hi sabse bada lever</span><p>Model wahi rakha, data 23 se 158 ghante kiya (Kathbath Hindi). Hindi test CER <b>0.323 → 0.110</b>, Marathi <b>0.402 → 0.193</b>. Upar ki table pehle (23 ghante) wale model ki hai.</p></div>
+  <p style="font-size:9.2pt;color:#52514e">{{STT_SPEED}}</p>
+  <div class="box warn"><span class="k">Sachchi baat</span><p>Hamara model {{P_STT}} knobs ka hai aur 23.5 ghante pe seekha. 300 M wala model 65 guna bada hai aur hazaaron ghante pe seekha. Wo 3 se 7 guna kam galtiyan karta hai; hamara 10 guna tez hai. Marathi ka WER 1 se upar hai kyunki lambe shabd mein ek akshar galat = poora shabd galat, aur model kabhi ek shabd ko do mein tod deta hai (ek badla + ek faltu).</p></div>
+  <h3>Chhota karna (quantization)</h3>
+  {{STT_SHRINK}}
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Asli 4 shabd, model ne 1 badla aur 1 faltu joda. WER? <i>2 ÷ 4 = 0.50.</i></p>
+    <p><b>2.</b> WER 1 se zyada ho sakta hai? <i>Haan, agar model bahut faltu shabd jode.</i></p>
+    <p><b>3.</b> Overfitting kaise pakdoge? <i>Train loss girta rahe par dev CER sudharna band ho jaaye.</i></p>
+    <p><b>4.</b> int8 se kitna size bacha aur kitna nuksaan? <i>4 guna chhota (18.5 → 4.6 MB), CER lagbhag wahi.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"I report CER and WER on a held-out test split next to a 300 million parameter baseline, on the same clips. My 4.6 million parameter model is far less accurate but about ten times faster, and int8 quantization shrinks it four times at no measurable cost."</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 4</div><h2>Bolna: TTS</h2><p>Text se awaaz. Text-to-speech. Sunne ka ulta, aur usse mushkil.</p>
+  <ul><li><b>10</b>Mushkil kyun</li><li><b>11</b>Text padhna</li><li><b>12</b>Har akshar kitna lamba</li><li><b>13</b>Text se tasveer</li><li><b>14</b>Tasveer se awaaz</li></ul></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">10</div><div><h2>Bolna sunne se mushkil kyun</h2><div class="file">seedhi 10 · one-to-many, phase, do hisse</div></div></div>
+  <figure>{{MIRROR}}</figure>
+  <div class="story"><span class="k">Kahani</span><p>Kisi ki photo dekh ke uska naam batana aasaan hai. Naam sun ke uski photo banana mushkil: chehra, baal, kapde, sab tumhe <b>gadhna</b> padta hai. STT jaankari phenkta hai (awaaz → text). TTS ko wo jaankari wapas banani padti hai: lay, sur, zor, sab.</p></div>
+  <p><b>One-to-many:</b> "theek hai" ko hazaar tarah bola ja sakta hai: dheere, jaldi, gusse mein, sawaal ki tarah. Model ko ek chunna hai.</p>
+  <figure><div class="fig-t">Phase: jo spectrogram mein nahi hota</div>{{PHASE}}</figure>
+  <p><b>Do hisse:</b> (1) <b>acoustic model</b>: text → mel tasveer. (2) <b>vocoder</b>: mel tasveer → awaaz. Phase ki mushkil doosre hisse ki hai.</p>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> TTS "one-to-many" kyun hai? <i>Ek vaakya kai tarah bola ja sakta hai; model ko lay aur sur khud chunne padte hain.</i></p>
+    <p><b>2.</b> Spectrogram mein kya nahi hota? <i>Phase: har lehar apne chakkar mein kahan hai.</i></p>
+    <p><b>3.</b> TTS ke do hisse? <i>Acoustic model (text → mel) aur vocoder (mel → waveform).</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"TTS is harder than ASR because it is one-to-many: the model must invent timing, pitch and phase. So it is split into an acoustic model that predicts a mel spectrogram and a vocoder that reconstructs the waveform."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">11</div><div><h2>Machine text kaise padhti hai</h2><div class="file">seedhi 11 · text front-end, punctuation, schwa, bhasha</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>News reader ke haath mein script hai. Comma pe wo saans leta hai, sawaal pe sur uthata hai, aur "2024" ko "do hazaar chaubees" padhta hai. TTS ka pehla kadam yahi tayyari hai.</p></div>
+  <table class="words">
+    <thead><tr><th>Kaam</th><th>Kyun</th></tr></thead>
+    <tbody>
+      <tr><td>Punctuation rakhna</td><td>Comma = chhota rukna, full stop = lamba rukna aur girta sur, ? = uthta sur. (STT ne punctuation phenka tha, kyunki wo sunai nahi deta.)</td></tr>
+      <tr><td>Akshar, phoneme nahi</td><td>Devanagari lagbhag jaisa likha waisa bola jaata hai, to model seedha akshar padhta hai. AI4Bharat ka Indian TTS bhi aise hi.</td></tr>
+      <tr><td>Bhasha ki id</td><td>"to" English mein "too", Hinglish mein "toh". Hindi aur Marathi ki script ek, ucharan alag. Model ko bhasha batate hain: hi, mr, en, hing.</td></tr>
+    </tbody>
+  </table>
+  <div class="calc"><span class="k">Haath se samjho: schwa deletion</span>
+    <p><b>कमल</b> = क + म + ल. Har vyanjan ke saath ek chhupa "a" hota hai: likha "ka-ma-la", par bolte hain "<b>ka-mal</b>". Aakhri "a" gir gaya.</p>
+    <p><b>नमस्ते</b> → "na-mas-te", "na-ma-sa-te" nahi. Ye girne wala "a" hi schwa hai. Akshar padhne wale model ko ye examples se seekhna padta hai.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> "दिल" kaise bolte hain? <i>"dil", "di-la" nahi: aakhri schwa gira.</i></p>
+    <p><b>2.</b> TTS punctuation kyun rakhta hai jab STT phenk deta hai? <i>TTS ke liye punctuation lay aur sur batata hai; STT ke liye wo sunai nahi deta.</i></p>
+    <p><b>3.</b> Hinglish ki alag id kyun? <i>Roman akshar wahi, par ucharan Hindi wala.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The front-end normalises text, keeps punctuation because it carries prosody, and adds a language id, since Hindi and Marathi share a script and Hinglish shares the Latin alphabet with English. I feed characters directly; the cost in Hindi is schwa deletion, which the model must learn."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">12</div><div><h2>Har akshar kitna lamba?</h2><div class="file">seedhi 12 · duration, monotonic alignment search (MAS)</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Gaane mein "pyaaaar" lamba kheencha jaata hai, "ka" chhota. 52 akshar se 430 frames banane hain, to har akshar ko kitne frames milenge? Data mein ye bhi nahi likha. MAS training ke dauraan khud dhoondhta hai, ek niyam ke saath: <b>akshar kram mein aayenge, koi chhootega nahi</b>.</p></div>
+  <figure><div class="fig-t">4 akshar, 11 frames: har khaana = "ye akshar is frame se kitna milta hai" (0 ke kareeb = accha)</div>{{MAS}}</figure>
+  <div class="calc"><span class="k">Haath se hisaab: MAS</span>
+    <p>2 akshar, 3 frames. Milaan: akshar 1 → [−0.1, −0.2, −2.0], akshar 2 → [−3.0, −1.5, −0.1].</p>
+    <p>Sirf do tareeke hain: <b>[1, 2]</b> (akshar 1 ko 1 frame, akshar 2 ko 2): −0.1 + (−1.5) + (−0.1) = −1.7. &nbsp;<b>[2, 1]</b>: −0.1 + (−0.2) + (−0.1) = <b>−0.4</b>.</p>
+    <p>−0.4 bada hai, to durations = <b>[2, 1]</b>. MAS yahi chunaav dynamic programming se karta hai, chahe 100 akshar aur 800 frames hon.</p>
+  </div>
+  <div class="calc"><span class="k">Haath se hisaab: kitne frames</span>
+    <p>TTS mein 86 frames har second. 2 second ka vaakya ≈ <b>172 frames</b>. 20 akshar → ausat <b>8.6 frames</b> har akshar.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> MAS ka "monotonic" kya hai? <i>Akshar kram mein; raasta kabhi peeche nahi jaata, koi akshar nahi chhoota.</i></p>
+    <p><b>2.</b> Training ke baad (asli use mein) durations kahan se aati hain? <i>Ek chhota duration predictor, jo training mein MAS ki durations dekh ke seekha.</i></p>
+    <p><b>3.</b> CTC aur MAS mein kya milta-julta hai? <i>Dono alignment ki mushkil hal karte hain, dynamic programming se, bina kisi ke bataye.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Durations come from monotonic alignment search during training: dynamic programming finds the best monotonic text-to-frame alignment against the encoder's per-character prior, with no external aligner. A duration predictor learns those durations for inference."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">13</div><div><h2>Text se tasveer</h2><div class="file">seedhi 13 · acoustic model, length regulator, non-autoregressive</div></div></div>
+  <div class="cols2">
+    <figure><div class="fig-t">Acoustic model + vocoder</div>{{TTS_ARCH}}</figure>
+    <div>
+      <div class="story"><span class="k">Kahani</span><p>Gaayak ke saamne bol likhe hain. Pehle wo tay karta hai ki har akshar kitna kheenchna hai (duration). Phir har akshar ko utni der gaata hai (length regulator) aur sur ko ek akshar se doosre tak chikna milata hai (decoder).</p></div>
+      <div class="box simple"><span class="k">Sab frames ek saath</span><p>Purane model (Tacotron) ek-ek frame banate the aur kabhi shabd chhod dete ya dohrate the. Yahan durations pehle tay, to chhootna ya dohrana ho hi nahi sakta, aur saare frames ek hi baar mein.</p></div>
+    </div>
+  </div>
+  <figure><div class="fig-t">Length regulator haath se</div>{{LENREG}}</figure>
+  <div class="box simple"><span class="k">Teen losses (training mein)</span><p><b>Mel loss</b>: banayi aur asli tasveer ka fark (asli kaam). <b>Prior loss</b>: har akshar ka andaza uske asli frames ke paas ho (taaki MAS sahi milaaye). <b>Duration loss</b>: predictor MAS jaisi durations bataye.</p></div>
+  <div class="myth"><span class="k">Galatfehmi</span><p>"Loss kam = awaaz achhi." Hamesha nahi. Mel loss sab sambhav awaazon ka <b>ausat</b> pasand karta hai, aur ausat tasveer dhundhli hoti hai (over-smoothing). Isliye sunke bhi dekhna padta hai.</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> [x, y] aur durations [3, 2]: length regulator ke baad? <i>x x x y y.</i></p>
+    <p><b>2.</b> Speed 1.2 guna tez kaise? <i>Har duration ko 1.2 se bhaag do; sur wahi rehta hai.</i></p>
+    <p><b>3.</b> Non-autoregressive ka fayda? <i>Tez (ek pass), aur shabd chhootna / dohrana nahi hota.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It is a FastSpeech-style non-autoregressive model: a text encoder, a duration predictor, a length regulator that repeats each character's vector by its duration, and a decoder that outputs the mel spectrogram. Fixing durations first removes the skipping and repeating that attention-based Tacotron suffers from."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">14</div><div><h2>Tasveer se awaaz</h2><div class="file">seedhi 14 · vocoder, Griffin-Lim, distillation, naap</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Kisi gaane ki sheet music (kaunsa sur kab) se gaana bajana. Sheet mein ye nahi likha ki har sur ki lehar kahan se shuru ho (phase). Purana tareeka (<b>Griffin-Lim</b>) andaza lagata rehta hai, aur awaaz thodi jhanjhanati hai. <b>Neural vocoder</b> asli awaazon se seekhta hai ki phase kaisa hona chahiye.</p></div>
+  <div class="cmp">
+    <div class="bad"><b>Griffin-Lim (1984)</b>Random phase se shuru; baar-baar: awaaz banao, dobara Fourier karo, uska phase rakho. Koi training nahi. Awaaz metallic.</div>
+    <div class="good2"><b>Hamara vocoder (Vocos jaisa)</b>Har frame ke liye 513 magnitude aur 513 phase seekhta hai, phir ek ulta-Fourier (iSTFT) se samples. Frame rate pe hi chalta hai, isliye bahut tez.</div>
+  </div>
+  <div class="calc"><span class="k">Haath se hisaab</span>
+    <p>Har frame ulte-Fourier ke baad <b>256 naye samples</b> deta hai (hop). 86 frames × 256 = <b>22,016</b> ≈ 22,050 samples, yaani lagbhag 1 second awaaz.</p>
+  </div>
+  <figure><div class="fig-t">Data kahan se aaya: distillation</div>{{DISTILL}}</figure>
+  {{TTS_DATA}}
+  <p><b>Naapna:</b> log sunke 1–5 number dete hain (MOS). Hamare paas log nahi, to doosra tareeka: TTS ki awaaz ek mazboot STT ko sunao aur dekho kitne akshar galat likhe. Wahi vaakya teacher ki awaaz mein bhi. Dono ka fark = student ne kya khoya.</p>
+  {{TTS_RESULTS}}
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Vocoder kya wapas banata hai? <i>Phase, jo mel spectrogram mein nahi tha.</i></p>
+    <p><b>2.</b> Distillation mein student teacher se behtar ho sakta hai? <i>Nahi; wo teacher ki nakal seekhta hai, paas pahunch sakta hai.</i></p>
+    <p><b>3.</b> MOS kya hai? <i>Logon ki 1–5 rating: TTS ki naturalness ka paimana.</i></p>
+  </div>
+  <div class="recap"><span class="k">Bhaag 4 ek saans mein</span><ol>
+    <li>Text front-end: punctuation, akshar, bhasha.</li>
+    <li>Encoder → har akshar ki duration (training mein MAS, baad mein predictor).</li>
+    <li>Length regulator → decoder → mel tasveer.</li>
+    <li>Vocoder: magnitude + phase → iSTFT → awaaz.</li></ol></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The vocoder reconstructs the phase the mel spectrogram dropped. Mine follows Vocos: it predicts magnitude and phase per frame and uses an inverse STFT, which is much faster than upsampling vocoders like HiFi-GAN. The training audio was distilled from a 99 million parameter teacher."</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 5</div><h2>Baat-cheet: orchestrator</h2><p>Teen models apne aap baat nahi kar sakte. Kaun kab bolega, ye tay karne wala hissa. Isme koi model nahi, sirf samay ka hisaab.</p>
+  <ul><li><b>15</b>Teen models, ek baat-cheet</li><li><b>16</b>VAD</li><li><b>17</b>Turn detection</li><li><b>18</b>Streaming aur latency</li><li><b>19</b>Barge-in</li></ul></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">15</div><div><h2>Teen models, ek baat-cheet</h2><div class="file">seedhi 15 · pipeline, candidate ka safar</div></div></div>
+  <figure><div class="fig-t">Awaaz andar, awaaz bahar</div>{{PIPE}}</figure>
+  <figure><div class="fig-t">Ek baari: candidate kya mehsoos karta hai, machine kya karti hai</div>{{JOURNEY}}</figure>
+  <div class="box good"><span class="k">Accha experience = teen cheezein</span><p><b>1.</b> Jaldi jawab (kam latency). <b>2.</b> Beech mein na toke (false cutoff nahi). <b>3.</b> User bole to turant chup (barge-in). Teeno aapas mein ladti hain: jaldi jawab doge to tokne ka khatra badhega.</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Pipeline ke dabbe kram mein bolo. <i>Mic → VAD → STT → turn detection → LLM → vaakya tukde → TTS → speaker.</i></p>
+    <p><b>2.</b> "Time to first audio" kya hai? <i>User ke rukne se agent ke bolna shuru karne tak ka samay.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It is a cascaded pipeline: VAD, speech-to-text, a turn detector, a streaming LLM, sentence chunking and text-to-speech. The metric I optimise is time to first audio, without cutting the user off."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">16</div><div><h2>Koi bol raha hai?</h2><div class="file">seedhi 16 · VAD, noise floor, hysteresis</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Classroom mein pankha chal raha hai. Teacher pankhe ki awaaz ko "chuppi" maan leta hai, aur kisi bachche ki awaaz pankhe se kaafi zyada ho tabhi "koi bola" samajhta hai. VAD (voice activity detection) yahi karta hai, har 20 ms pe.</p></div>
+  <figure>{{VAD}}</figure>
+  <table class="words">
+    <thead><tr><th>Shabd</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Noise floor</td><td>Kamre ka shor jab koi nahi bol raha (pankha). VAD ise khud seekhta rehta hai.</td></tr>
+      <tr><td>Margin</td><td>Floor se kitna zyada ho to "bolna" maanein: 12 dB.</td></tr>
+      <tr><td>Hysteresis</td><td>Shuru aur ant ke alag niyam: 100 ms lagataar awaaz = shuru; 500 ms lagataar chuppi = ant.</td></tr>
+      <tr><td>Pre-roll</td><td>Pichhle 300 ms sambhal ke rakhna, kyunki "shuru" 100 ms der se pata chalta hai. Warna pehla akshar kat jaata.</td></tr>
+    </tbody>
+  </table>
+  <div class="calc"><span class="k">Haath se hisaab</span>
+    <p>Floor = −50 dB, margin = 12 dB, to seema = <b>−38 dB</b>. Frame −30 dB → <b>bolna</b>. Frame −45 dB → <b>chuppi</b>.</p>
+    <p>Shuru: 100 ms ÷ 20 ms = <b>5 frames</b> lagataar awaaz. Ant: 500 ms ÷ 20 = <b>25 frames</b> lagataar chuppi.</p>
+  </div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Vaakya ke beech 0.2 s ka rukna utterance khatm karega? <i>Nahi; ant ke liye 0.5 s chuppi chahiye.</i></p>
+    <p><b>2.</b> Energy VAD ki sabse badi kamzori? <i>Bolne aur kisi bhi zor ki awaaz (music, horn) mein fark nahi kar sakta. Isliye asli systems neural VAD (Silero) lagate hain.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"My VAD is energy-based: 20 millisecond frames compared against an adaptive noise floor, with hysteresis, 100 milliseconds to start and 500 to end, and a pre-roll buffer so the first syllable is not lost. Production systems use a neural VAD like Silero to reject non-speech noise."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">17</div><div><h2>Baat poori hui ya nahi?</h2><div class="file">seedhi 17 · turn detection, false cutoff</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>"Mera order number hai ..." (soch raha hai) aur "Haan theek hai." (baat khatm): dono ke baad chuppi hai. Pehle pe bol pade to tumne toka. Doosre pe 2 second ruke to agent mara hua lagega. Insaan ye <b>shabdon ke matlab</b> se samajhta hai. Hamara agent bhi.</p></div>
+  <div class="box simple"><span class="k">Hamara tareeka</span><p>Apne LLM se poochte hain: in shabdon ke baad "vaakya khatm" (., ?, ! ya nayi line) aane ki kitni sambhavna hai? Zyada (0.5 se upar) → <b>0.3 s</b> mein jawab. Kam → <b>1.5 s</b> tak sabr.</p></div>
+  {{TURN}}
+  <div class="box warn"><span class="k">Table ko sach-sach padho</span><p>"tum kahan ho?" pe 0.98: turant jawab, sahi. "mujhe lagta hai ki" pe 0.000: sabr, sahi. Par "haan theek hai" pe sirf 0.014 aaya: model ne isse adhoora samjha, to agent 1.5 s rukega. Galti dheemepan ki hai, tokne ki nahi: ye "sasti" galti hai. Ye 10 haath ke likhe udaharan hain, benchmark nahi.</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> False cutoff kya hai? <i>User ne baat poori nahi ki aur agent bol pada.</i></p>
+    <p><b>2.</b> Sirf chuppi se kaam kyun nahi chalta? <i>Beech ka rukna aur baat ka ant dono chuppi hain; shabd dekhne padte hain.</i></p>
+    <p><b>3.</b> Threshold 0.5 jawab "dena / na dena" tay karta hai? <i>Nahi; sirf kitna sabr rakhna hai. Jawab hamesha aata hai.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Silence cannot tell a pause from the end of a turn. I add a semantic signal: the LLM's probability that the next token ends the sentence. If the text looks finished I answer after 300 milliseconds, otherwise I wait up to 1.5 seconds. The metric is false cutoffs at a latency budget."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">18</div><div><h2>Jaldi jawab kaise</h2><div class="file">seedhi 18 · streaming, latency budget</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Restaurant mein poora khana ek saath laane ka intezaar karoge to bhookh se mar jaoge. Accha waiter pehle soup le aata hai, baaki peeche banta rehta hai. Voice agent bhi pehla vaakya bante hi bol deta hai; baaki jawab tab tak ban raha hota hai.</p></div>
+  <figure>{{STREAM}}</figure>
+  <div class="calc"><span class="k">Haath se hisaab (misaal ke numbers)</span>
+    <p>STT 0.2 s. LLM 3 vaakya, har ek 0.3 s. TTS har vaakya 0.1 s.</p>
+    <p><b>Bina streaming</b>: 0.2 + (3 × 0.3) + (3 × 0.1) = <b>1.4 s</b> baad pehli awaaz.</p>
+    <p><b>Streaming</b>: 0.2 + 0.3 + 0.1 = <b>0.6 s</b> baad pehli awaaz. Kaam utna hi, intezaar aadhe se kam.</p>
+  </div>
+  <p>Jawab ko vaakyon mein kyun todte hain, shabdon mein kyun nahi? Kyunki TTS ko pura vaakya chahiye taaki sur sahi ho (sawaal ka sur aakhir mein uthta hai).</p>
+  <h3>Asli numbers: hamare teeno models ek saath</h3>
+  {{E2E}}
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Streaming kul kaam ghatata hai? <i>Nahi; sirf pehli awaaz jaldi laata hai.</i></p>
+    <p><b>2.</b> Latency ke hisse kaunse hain? <i>Chuppi ka intezaar, STT, LLM ka pehla tukda (TTFT), TTS ka pehla vaakya.</i></p>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Every stage starts on partial output of the previous one: the LLM streams tokens, I cut them into sentences, and each sentence is synthesized as soon as it closes. Time to first audio then depends on one sentence, not the whole reply."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">19</div><div><h2>Beech mein tokna</h2><div class="file">seedhi 19 · barge-in, state machine, cancellation</div></div></div>
+  <figure><div class="fig-t">Agent hamesha teen mein se ek haalat (state) mein</div>{{STATES}}</figure>
+  <div class="story"><span class="k">Kahani</span><p>Call centre wala bol raha hai aur tum beech mein "ruko ruko" bolte ho. Accha agent turant chup hota hai aur sunta hai. Bura agent apni line poori karta hai. Machine ko turant chup karana teen kaam hai: awaaz band karo, baaki jawab radd karo, aur dhyan rakho ki purana jawab baad mein achanak na bol pade.</p></div>
+  <div class="box simple"><span class="k">Number wali parchi (cancellation)</span><p>Har jawab ko ek number milta hai. User toke to number badal jaata hai. Purane number ka har kaam (LLM, TTS) bolne se pehle check karta hai: "mera number abhi bhi chalu hai?" Nahi hai to chup-chaap ruk jaata hai.</p></div>
+  <div class="box warn"><span class="k">Echo</span><p>Speaker ki awaaz mic mein wapas jaati hai, to agent khud ko sun ke khud ko tok dega. Phone aur browser ise "echo cancellation" se rokte hain. Isliye laptop pe headphone.</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Teen states? <i>LISTENING, THINKING, SPEAKING.</i></p>
+    <p><b>2.</b> Model ka kaam alag thread mein kyun? <i>Warna sochte waqt mic sunna ruk jaata aur barge-in kaam na karta.</i></p>
+    <p><b>3.</b> Number (generation counter) kyun, thread ko seedha band kyun nahi? <i>Chalte thread ko beech mein maara nahi ja sakta; uska der se aaya nateeja phenkna padta hai.</i></p>
+  </div>
+  <div class="recap"><span class="k">Bhaag 5 ek saans mein</span><ol>
+    <li>VAD: bolna kab shuru, kab khatm.</li>
+    <li>Turn detection: chuppi + shabdon ka matlab → kitna rukna.</li>
+    <li>Streaming: pehla vaakya bante hi bolo.</li>
+    <li>Barge-in: user bole to awaaz band, jawab radd, number badlo.</li></ol></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The orchestrator is a three-state machine. Model calls run in worker threads so the loop keeps reading the microphone. On barge-in I stop playback and bump a generation counter, so every stage of the old reply drops its output. I test this with fake models that have known delays, and end to end with the three trained models."</p></div>
+</section>
+
+<div class="part"><div class="pn">Bhaag 6</div><h2>Interview</h2><p>Jo seekha use bolna. Ek seedhi, aur sabse zaroori.</p></div>
+
+<section class="flow">
+  <div class="chap"><div class="n">20</div><div><h2>Interview mein jawab kaise do</h2><div class="file">seedhi 20 · dhaancha, pitch, sachchai</div></div></div>
+  <div class="box simple"><span class="k">Har jawab ka dhaancha: 4 line</span><p><b>1. Kya hai</b>: ek line. &nbsp;<b>2. Kyun</b>: kaunsi problem hal karta hai. &nbsp;<b>3. Mere project mein</b>: "maine ye banaya, ye number aaya". &nbsp;<b>4. Kamzori</b>: iska trade-off.</p></div>
+  <h3>Ek sawaal, do jawab: "CTC kya hai?"</h3>
+  <div class="cmp">
+    <div class="bad"><b>Ratta wala</b>"CTC is Connectionist Temporal Classification, a loss function for sequence problems." <br><br>Agla sawaal "kyun?" aaya to atak gaye.</div>
+    <div class="good2"><b>Samajh wala</b>"It trains a recognizer without frame-level labels. Each frame outputs a character or a blank; repeats merge, blanks drop, and the loss sums every path that gives the transcript. In my model, the first run sat on the blank plateau and a longer warmup fixed it. Its weakness is that frames are independent, so there is no built-in language model."</div>
+  </div>
+  <div class="box say"><span class="k">30 second ki pitch</span><p>"I built a voice agent's four parts from scratch in PyTorch: an LLM with my own tokenizer, a speech recognizer trained with CTC, a non-autoregressive TTS with an inverse-STFT vocoder, and an orchestrator with VAD, turn detection, streaming and barge-in. It covers Hindi, Marathi, English and Hinglish, the models total {{P_ALL}} parameters, and every module has tests for the things that break silently."</p></div>
+  <div class="box warn"><span class="k">Jo nahi pata, wahan kya bolein</span><p>"Ye maine khud nahi banaya, par mera samajhna ye hai ki ... aur main ise aise check karunga ..." Interviewer andaaza lagana pasand karta hai, jhooth nahi. Jo bana hai aur jo nahi, uski list <code>scratch/CONCEPTS.md</code> mein hai.</p></div>
+  <div class="box good"><span class="k">Kaise yaad karein: roz 15 minute</span><p><b>1.</b> Har seedhi ke "Khud se poocho" sawaal, jawab dhak ke, zor se. <b>2.</b> Jo galat hue unpe nishaan; unhe 1 din, 3 din aur 7 din baad dobara. <b>3.</b> Har din ek "Interview mein bolo" line bina dekhe. <b>4.</b> 60 aur sawaal, beginner se advanced: <code>Voice-AI-Zero-Se.pdf</code> ka chapter 9.</p></div>
+  <div class="quiz"><span class="k">Aakhri khud-se-poocho: ek line mein</span>
+    <p><b>1.</b> Spectrogram? <i>Awaaz ki tasveer: samay × frequency.</i></p>
+    <p><b>2.</b> Blank? <i>"Kuch naya nahi", aur double akshar alag rakhna.</i></p>
+    <p><b>3.</b> MAS? <i>Har akshar ki duration, kram mein, dynamic programming se.</i></p>
+    <p><b>4.</b> Vocoder? <i>Mel se awaaz; khoya hua phase wapas.</i></p>
+    <p><b>5.</b> Barge-in? <i>User bole to agent turant chup.</i></p>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice AI: zero se</title>
+{{STYLE}}
+<style>
+.cover { background: linear-gradient(150deg, #0c1a2e 0%, #1b3f8f 42%, #1baf7a 100%); }
+.cover .tag, .cover h1 span { color: #a9f0d2; } .cover .sub { color: #e4f1ff; } .cover .tile span, .cover .foot { color: #cfe6f7; }
+.cover .tiles { grid-template-columns: repeat(4, 1fr); }
+.c-stt .n { background: #2a78d6; } .c-llm .n { background: #184f95; } .c-tts .n { background: #eb6834; } .c-orc .n { background: #1baf7a; }
+.c-stt { border-bottom-color: #2a78d6; } .c-llm { border-bottom-color: #184f95; } .c-tts { border-bottom-color: #eb6834; } .c-orc { border-bottom-color: #1baf7a; }
+.band { border-radius: 12px; padding: 4mm 5mm; margin: 4mm 0; color: #fff; break-inside: avoid; }
+.band b { font: 600 13pt "Avenir Next", sans-serif; display: block; margin-bottom: 1mm; } .band p { margin: 0; font-size: 10pt; opacity: .95; }
+.b-stt { background: linear-gradient(120deg, #2a78d6, #184f95); } .b-tts { background: linear-gradient(120deg, #eb6834, #c2410c); }
+.b-orc { background: linear-gradient(120deg, #1baf7a, #0b6e4b); } .b-llm { background: linear-gradient(120deg, #184f95, #0c1a2e); }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
+.steps div { border-radius: 10px; padding: 3mm; background: #f4f6fa; border: 1px solid var(--line); font-size: 9.2pt; break-inside: avoid; }
+.steps b { display: block; font: 600 10.5pt "Avenir Next", sans-serif; color: var(--blue-d); margin-bottom: 1mm; }
+pre.log { font: 8.6pt/1.5 "SF Mono", Menlo, monospace; background: #0c1a2e; color: #e6f0fc; border-radius: 10px; padding: 4mm; white-space: pre-wrap; break-inside: avoid; }
+.sample { font-size: 9.4pt; }
+figure svg text { font-family: -apple-system, "Kohinoor Devanagari", sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tag">Bilkul shuruaat se · tasveeron mein · koi pehle ka gyaan nahi chahiye</div>
+  <h1>Voice AI:<br><span>zero se, andar tak.</span></h1>
+  <div class="sub">Ek voice agent jo sunta hai, sochta hai aur bolta hai. Uske chaaron hisse (sunna, sochna, bolna, baat-cheet sambhalna) is project mein scratch se bane hain. Ye guide har hisse ko pehle tasveer mein dikhati hai, phir do line mein samjhati hai.</div>
+  <div class="tiles">
+    <div class="tile"><b>4</b><span>hisse: STT, LLM, TTS, orchestrator</span></div>
+    <div class="tile"><b>{{P_ALL}}</b><span>parameters, chaaron models milake</span></div>
+    <div class="tile"><b>3 + 1</b><span>Hindi, Marathi, English, aur Hinglish</span></div>
+    <div class="tile"><b>{{N_TERMS}}</b><span>terms, har ek code ki line se juda</span></div>
+  </div>
+  <div class="foot"><span>own-voice-models / scratch</span><span>Har number aur graph is project ki apni files se bana hai</span></div>
+</div>
+
+<main>
+
+<section class="page">
+  <h2>Poora project ek tasveer mein</h2>
+  <p class="lead">Tum bolte ho. Machine sunti hai, samajhti hai, jawab sochti hai aur bol deti hai. Beech mein ye aath dabbe hain.</p>
+  <figure><div class="fig-t">Awaaz andar, awaaz bahar</div>{{PIPE}}</figure>
+  <div class="tiles">
+    <div class="tile"><b>{{P_STT}}</b><span>STT: awaaz ko text banata hai</span></div>
+    <div class="tile"><b>{{P_LLM}}</b><span>LLM: jawab likhta hai</span></div>
+    <div class="tile"><b>{{P_TTS}}</b><span>TTS: text ki tasveer (mel) banata hai</span></div>
+    <div class="tile"><b>{{P_VOC}}</b><span>Vocoder: tasveer ko awaaz banata hai</span></div>
+  </div>
+  <div class="box simple"><span class="k">Parameter kya hai?</span><p>Model ke andar ka ek knob (ek number). Training in knobs ko ghumati hai jab tak jawab sahi na aane lage. ChatGPT mein ye kharabon mein hain; hamare chaaron models milake {{P_ALL}}. Chhota hai, isliye laptop pe ban gaya aur tum har line padh sakte ho.</p></div>
+  <h3>Is guide ko kaise padhna hai</h3>
+  <div class="cols2">
+    <div class="story"><span class="k">Kahani</span><p>Rozmarra ki misaal. Pehle ye samjho, phir asli naam.</p></div>
+    <div class="box simple"><span class="k">Seedhi baat</span><p>Wahi cheez do-teen line mein.</p></div>
+    <div class="box say"><span class="k">Interview mein bolo</span><p>Wahi baat English mein, jaise bolni hai.</p></div>
+    <div class="box warn"><span class="k">Sachchi baat</span><p>Jahan model kamzor hai ya kuch nahi bana, wahan saaf likha hai.</p></div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>Candidate ka safar: ek baari, shuru se ant tak</h2>
+  <p class="lead">Upar: insaan kya karta aur mehsoos karta hai. Neeche: usi pal machine ke andar kya chal raha hai.</p>
+  <figure><div class="fig-t">Ek sawaal, ek jawab, ek tokna</div>{{JOURNEY}}</figure>
+  <div class="steps">
+    <div><b>Kadam 1-2</b>Mic hamesha khula hai. VAD pehchanta hai ki bolna kab shuru hua aur kab ruka.</div>
+    <div><b>Kadam 3</b>STT awaaz ko text banata hai. Turn detector poochta hai: baat poori hui ya beech ka rukna tha?</div>
+    <div><b>Kadam 4-5</b>LLM jawab likhna shuru karta hai. Pehla vaakya bante hi TTS use bol deta hai; baaki peeche banta rehta hai.</div>
+    <div><b>Kadam 6</b>Candidate beech mein bola to agent usi pal chup. Ise barge-in kehte hain.</div>
+  </div>
+  <div class="box good"><span class="k">Accha experience kya hai?</span><p>Teen cheezein: agent jaldi jawab de (kam delay), beech mein na toke (false cutoff na ho), aur tokne pe turant ruk jaaye. Teeno ek doosre se ladti hain: jaldi jawab doge to tokne ka khatra badhta hai. Chapter 7 isi santulan ke baare mein hai.</p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It is a cascaded voice pipeline: VAD, speech-to-text, a turn detector, an LLM that streams tokens, sentence chunking, and text-to-speech. The metric I optimise is time to first audio, and the agent supports barge-in."</p></div>
+</section>
+
+<section class="page">
+  <h2>Architecture: paanch parton mein</h2>
+  <p class="lead">Upar insaan, neeche data. Har part sirf apne upar-neeche wale se baat karta hai.</p>
+  <figure><div class="fig-t">Kaun kiske upar khada hai</div>{{ARCH}}</figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">"Scratch se" ka matlab</span><p>Model ka har hissa (attention, CTC ka loss, alignment, vocoder), training loop aur orchestration is folder mein haath se likha hai. PyTorch sirf tensors aur gradients ke liye hai. Koi bana-banaya model load nahi hota.</p></div>
+    <div class="box warn"><span class="k">Sachchi baat</span><p>Data bahar se aaya hai (FLEURS, OpenSLR), aur TTS ne ek bade model ki awaaz ki nakal karke seekha hai (distillation). Ye model asli agent ke models ki jagah nahi lenge; inka kaam samjhana hai.</p></div>
+  </div>
+  <h3>Sunna aur bolna ek doosre ka aaina hain</h3>
+  <figure>{{MIRROR}}<figcaption><b>Beech ki cheez dono mein wahi hai:</b> log-mel spectrogram. STT use padhta hai, TTS use banata hai.</figcaption></figure>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">1</div><div><h2>Awaaz numbers kaise banti hai</h2><div class="file">dekho: <code>stt/audio.py</code> · lesson 1</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Talaab mein pathar phenko to lehrein uthti hain. Awaaz bhi hawa ki lehar hai. Mic ek aisa chowkidaar hai jo har second 16,000 baar likh leta hai ki lehar abhi kitni oonchi hai. Wahi lambi list "awaaz" hai.</p></div>
+  <figure><div class="fig-t">Asli awaaz ke 25 millisecond</div>{{WAVE}}</figure>
+  <div class="steps">
+    <div><b>Sample</b>List ka ek number: ek pal ki oonchai.</div>
+    <div><b>Sampling rate</b>Ek second mein kitne numbers. Sunne ke liye 16,000; bolne ke liye 22,050.</div>
+    <div><b>Frame</b>25 ms ka tukda. Itni der awaaz "ek jaisi" maani jaati hai.</div>
+    <div><b>Hop</b>Har 10 ms pe naya frame. Yaani 100 frames har second.</div>
+  </div>
+  <div class="box warn"><span class="k">Dikkat</span><p>In numbers mein "a" ya "k" kahin nahi dikhta. Swar ko swar banati hain uski <b>frequencies</b>: kaunse sur zor se baj rahe hain. Wo is list mein chhupi hain. Isliye tasveer badalni padti hai.</p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Audio is a sequence of samples: 16,000 per second for recognition. I parse the WAV header myself, convert to mono floats, and work on 25 millisecond frames with a 10 millisecond hop."</p></div>
+
+  <div class="chap" style="margin-top:9mm"><div class="n">2</div><div><h2>Spectrogram: awaaz ki tasveer</h2><div class="file">dekho: <code>stt/audio.py</code> · <code>power_spectrogram</code>, <code>mel_filterbank</code>, <code>log_mel</code></div></div></div>
+  <figure><div class="fig-t">Samay baayein se daayein, frequency neeche se upar, gehra rang = zyada zor</div>{{MEL}}</figure>
+  <div class="steps">
+    <div><b>1. Frames</b>Awaaz ko 25 ms ke tukdon mein kaato.</div>
+    <div><b>2. Fourier</b>Har tukde se poocho: kaunsi frequency kitni hai?</div>
+    <div><b>3. Mel</b>201 frequencies ko 80 pattiyon mein sameto, kaan ki tarah (neeche baareek, upar moti).</div>
+    <div><b>4. Log</b>Kaan anupaat sunta hai, isliye log lo.</div>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"I convert the waveform to an 80-band log-mel spectrogram: 25 millisecond Hann windows every 10 milliseconds, FFT, a mel filterbank, then log. I wrote the STFT by hand and tested it against torch.stft."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap c-stt"><div class="n">3</div><div><h2>STT: tasveer se akshar</h2><div class="file">dekho: <code>stt/model.py</code>, <code>stt/ctc.py</code> · lessons 4-5</div></div></div>
+  <div class="band b-stt"><b>Kaam ek line mein</b><p>Har 40 millisecond ke liye batao: is pal kaunsa akshar bola ja raha hai, ya koi nahi.</p></div>
+  <div class="cols2">
+    <figure><div class="fig-t">Model: {{P_STT}} parameters</div>{{STT_ARCH}}</figure>
+    <div>
+      <div class="story"><span class="k">Kahani</span><p>Ek clerk film ki har 4 frame mein se 1 dekhta hai (subsampling). Phir har frame ke liye do kaam: aas-paas ke frames dekhna (convolution: "ye 'k' ki shakal hai") aur poori film mein kahin bhi jhaankna (attention: "aage 'kal' aa raha hai, to ye 'k' hi hoga").</p></div>
+      <div class="box simple"><span class="k">Encoder-only</span><p>LLM ek-ek token likhta tha aur peeche hi dekh sakta tha. Ye model poora clip ek saath dekhta hai, aage-peeche dono, aur saare frames ek hi baar mein nikalta hai. Isliye tez hai.</p></div>
+      <div class="box warn"><span class="k">Padding ka jaal</span><p>Batch mein chhote clips ke peeche khaali jagah bharni padti hai. Agar model us khaali jagah ko "dekh" le to wahi clip akele aur batch mein alag jawab dega. <code>check.py</code> yahi pakadta hai.</p></div>
+    </div>
+  </div>
+  <h3>CTC: jab koi nahi batata ki kaunsa akshar kab bola gaya</h3>
+  <div class="story"><span class="k">Kahani</span><p>5 second ki awaaz = 125 frames. Text = 40 akshar. Kaunsa frame kis akshar ka? Kisi ne nahi likha. CTC kehta hai: mat batao. Model har frame pe ek akshar ya "blank" bole; phir do niyam lagao: <b>1.</b> lagataar dohraye akshar ek kar do, <b>2.</b> blank hata do.</p></div>
+  <figure><div class="fig-t">"hi" ka ek raasta, 7 frames mein</div>{{CTC}}</figure>
+  <div class="eq">h h - e - l l - l - o &nbsp;→&nbsp; h - e - l - l - o &nbsp;→&nbsp; hello</div>
+  <p>Do "l" isliye bache kyunki unke beech ek blank tha. Blank na hota to niyam 1 unhe ek kar deta.</p>
+  <table>
+    <thead><tr><th>Haath se hisaab: 2 frames, har frame mein blank 0.6, "a" 0.4</th><th>Raasta</th><th>Text</th><th class="r">Probability</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="4">Sabse sambhav <b>raasta</b> "- -" hai (0.36), par sabse sambhav <b>text</b> "a" hai (0.64), kyunki teen raaste "a" dete hain. CTC ka loss = −ln(sahi text ke saare raaston ka jod).</td><td>- -</td><td>""</td><td class="r">0.36</td></tr>
+      <tr><td>- a</td><td>a</td><td class="r">0.24</td></tr>
+      <tr><td>a -</td><td>a</td><td class="r">0.24</td></tr>
+      <tr><td>a a</td><td>a</td><td class="r">0.16</td></tr>
+    </tbody>
+  </table>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"CTC removes the need for frame-level labels. The model emits a character or a blank per frame, and the loss sums the probability of every path that collapses to the transcript, using the forward algorithm. I implemented it and it matches PyTorch's value and gradient."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap c-stt"><div class="n">4</div><div><h2>STT ki training: jo hua, sach-sach</h2><div class="file">dekho: <code>stt/train.py</code>, <code>stt/runs/train.log</code> · lesson 6</div></div></div>
+  <div class="tiles">
+    <div class="tile"><b>23.5 h</b><span>training audio (FLEURS)</span></div>
+    <div class="tile"><b>7,594</b><span>clips: Hindi, Marathi, English</span></div>
+    <div class="tile"><b>117</b><span>akshar ki vocabulary (blank ke saath)</span></div>
+    <div class="tile"><b>0.000</b><span>CER, jab 16 clips ratwaye (overfit test)</span></div>
+  </div>
+  <p><b>Overfit test pehle, hamesha:</b> poori training se pehle model ko sirf 16 clips ratwao. Rat le to pipeline sahi judi hai; na rate to code mein bug hai, aur koi data use theek nahi karega.</p>
+  <figure><div class="fig-t">Dev CER har epoch ke baad (neeche = behtar; 1.00 = kuch sahi nahi)</div>{{STT_CURVE}}
+    <figcaption><b>CER</b> = character error rate: 100 aksharon mein kitne galat. <b>Dev</b> = wo clips jo model ne training mein kabhi nahi dekhe.</figcaption></figure>
+  <div class="cols2">
+    <div class="story"><span class="k">Jo galat gaya</span><p>Pehli run mein learning rate bahut jaldi poora kar diya (1000 steps mein). Model ne sabse sasta dhokha seekh liya: "hamesha blank bolo". Loss atak gaya, CER 0.78 pe. Ise <b>blank plateau</b> kehte hain.</p></div>
+    <div class="box good"><span class="k">Jo sahi kiya</span><p>Ek chhota experiment chalaya jisme learning rate dheere badha: 5 epoch mein CER 0.57. Saboot milne ke baad warmup 3000 steps kiya aur training dobara shuru ki. Neeli line wahi hai.</p></div>
+  </div>
+  <p>{{STT_STATUS}}</p>
+  <h3>Test clips pe (jo model ne kabhi nahi dekhe), ek 300 M model ke saath</h3>
+  {{STT_TEST}}
+  <p style="font-size:9.2pt;color:#52514e">{{STT_SPEED}}</p>
+  <div class="box good"><span class="k">Zyada data, wahi model</span><p>Wahi 4.6 M model, 23 ghante ki jagah 158 ghante (+ Kathbath Hindi), muft Kaggle T4 pe 1.3 ghante. Test CER: Hindi <b>0.323 → 0.110</b>, Marathi <b>0.402 → 0.193</b>, English 0.446 → 0.369. Kathbath sirf Hindi hai, phir bhi Marathi aadha hua: dono Devanagari aur milte-julte sound.</p></div>
+  {{STT_SAMPLES}}
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"My first run sat on the CTC blank plateau. I ran a small controlled experiment, found the warmup was too short, fixed it, and kept both logs. I always run an overfit test on 16 clips before a full run."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap c-llm"><div class="n">5</div><div><h2>LLM: jawab sochna</h2><div class="file">dekho: <code>llm/</code> · iski apni do guides hain</div></div></div>
+  <div class="band b-llm"><b>Kaam ek line mein</b><p>Ab tak ke shabd dekh ke agla shabd batao. Baar-baar. Wahi jawab hai.</p></div>
+  <div class="cols2">
+    <div class="story"><span class="k">Kahani</span><p>Phone ka keyboard jo agla shabd sujhata hai, bas bahut behtar. {{P_LLM}} knobs, Hindi, Marathi aur Hinglish ki kahaniyon aur chat pe train hua.</p></div>
+    <div class="box simple"><span class="k">Voice agent mein iske do kaam</span><p><b>1.</b> Jawab likhna, token-dar-token, taaki pehla vaakya turant TTS ko mile. <b>2.</b> Ye batana ki candidate ki baat poori hui ya nahi (chapter 7).</p></div>
+  </div>
+  <table>
+    <thead><tr><th>Ye cheez</th><th>Kahan bani</th><th>Ek line mein</th></tr></thead>
+    <tbody>
+      <tr><td>Backpropagation</td><td><code>llm/autograd.py</code></td><td>Galti ko peeche ki taraf baantna, taaki har knob ko apna hissa pata chale</td></tr>
+      <tr><td>Tokenizer (BPE)</td><td><code>llm/tokenizer.py</code></td><td>Text ko tukdon mein, tukdon ko numbers mein</td></tr>
+      <tr><td>Attention + transformer</td><td><code>llm/model.py</code></td><td>Har shabd peeche ke kaam ke shabdon se jaankari leta hai</td></tr>
+      <tr><td>Sampling, KV cache</td><td><code>llm/generate.py</code></td><td>Probabilities se shabd chunna; purana hisaab yaad rakhna</td></tr>
+      <tr><td>LoRA, quantization</td><td><code>llm/lora.py</code>, <code>llm/shrink.py</code></td><td>1% knobs se nayi aadat; model ko 4 guna chhota karna</td></tr>
+    </tbody>
+  </table>
+  <div class="box good"><span class="k">Poori kahani yahan hai</span><p><code>llm/docs/LLM-Zero-Se-Interview-Tak.pdf</code> (10 seedhiyan, bilkul shuru se) aur <code>llm/docs/Chhotu-GPT-Andar-Se.pdf</code> (34 pages, saare graphs). STT aur TTS ke blocks isi attention, RMSNorm aur RoPE pe bane hain, to LLM wali guide pehle padhna faydemand hai.</p></div>
+  <div class="box warn"><span class="k">Sachchi baat</span><p>Ye LLM chhoti Hinglish baat kar leta hai, facts ya lambi soch nahi. Orchestrator mein ek flag se asli agent ka Gemma lag jaata hai (<code>--llm gemma</code>); baaki code nahi badalta.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap c-tts"><div class="n">6</div><div><h2>TTS: akshar se awaaz</h2><div class="file">dekho: <code>tts/</code> · lessons 1-9</div></div></div>
+  <div class="band b-tts"><b>Kaam ek line mein</b><p>Vaakya padho, tay karo har akshar kitni der bolna hai, uski tasveer (mel) banao, phir tasveer ko awaaz mein badlo.</p></div>
+  <figure><div class="fig-t">Data kahan se aaya: bade model ki nakal (distillation)</div>{{DISTILL}}</figure>
+  <div class="cols2">
+    <figure><div class="fig-t">Model: {{P_TTS}} + vocoder {{P_VOC}}</div>{{TTS_ARCH}}</figure>
+    <div>
+      <div class="story"><span class="k">Kahani</span><p>Gaayak ke saamne bol likhe hain. Pehle wo tay karta hai har akshar kitna kheenchna hai (duration). Phir sur aur awaaz bharta hai (decoder). Aakhir mein gala use asli dhwani banata hai (vocoder).</p></div>
+      <div class="box simple"><span class="k">Saare frames ek saath</span><p>Purane models (Tacotron) ek-ek frame banate the aur kabhi shabd chhod dete ya dohrate the. Yahan durations pehle tay ho jaati hain, to chhootna ya dohrana ho hi nahi sakta, aur sab frames ek hi baar mein bante hain.</p></div>
+      <div class="box simple"><span class="k">Punctuation yahan zaroori hai</span><p>STT ne comma phenk diya tha kyunki wo sunai nahi deta. TTS use rakhta hai: comma = chhota rukna, sawaaliya nishaan = uthta sur.</p></div>
+    </div>
+  </div>
+  <h3>Har akshar kitna lamba? MAS khud dhoondhta hai</h3>
+  <figure><div class="fig-t">4 akshar, 11 frames: har khaane mein "ye akshar is frame se kitna milta hai" (0 ke kareeb = accha)</div>{{MAS}}</figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Niyam</span><p>Raasta sirf daayein ya daayein-neeche ja sakta hai: akshar kram mein, koi chhoota nahi. Jis akshar ko jitne khaane mile, wahi uski duration.</p></div>
+    <div class="box simple"><span class="k">Vocoder ka kamaal</span><p>Mel mein "phase" nahi hota (lehar apne chakkar mein kahan hai). Purana tareeka (Griffin-Lim) andaza lagata hai aur jhanjhanata hai. Hamara vocoder har frame ka zor aur phase dono seekhta hai, phir ek ulta-Fourier se awaaz banti hai.</p></div>
+  </div>
+  <h3>Kitna data, aur naapa kaise</h3>
+  {{TTS_DATA}}
+  <p>Naapne ka tareeka: hamari TTS ki awaaz ek mazboot recognizer (300 M) ko sunao aur dekho usne kitne akshar galat likhe. Wahi vaakya teacher ki awaaz mein bhi sunao. Dono ka fark = student ne kya khoya.</p>
+  {{TTS_RESULTS}}
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It is a non-autoregressive FastSpeech-style model. Durations come from monotonic alignment search during training, a duration predictor replaces it at inference, and a Vocos-style vocoder predicts magnitude and phase for an inverse STFT. The training audio was distilled from a larger teacher model."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap c-orc"><div class="n">7</div><div><h2>Orchestrator: teen models ko baat-cheet banana</h2><div class="file">dekho: <code>orchestrator/</code> · lessons 1-5</div></div></div>
+  <div class="band b-orc"><b>Kaam ek line mein</b><p>Tay karna ki kaun kab bolega. Isme koi model nahi hai, sirf samay ka hisaab aur ek state machine.</p></div>
+  <h3>1. VAD: koi bol raha hai?</h3>
+  <figure>{{VAD}}<figcaption>Har 20 ms ka frame: kamre ke shor se 12 dB zyada zor ho to "awaaz". <b>START</b> 100 ms lagataar awaaz ke baad, <b>END</b> 500 ms lagataar chuppi ke baad.</figcaption></figure>
+  <h3>2. Turn detection: baat poori hui, ya bas soch raha hai?</h3>
+  <div class="cols2">
+    <div>
+      <div class="story"><span class="k">Kahani</span><p>"mera order number hai ..." ke baad rukna aur "haan theek hai." ke baad rukna: dono chuppi hain. Pehle pe jawab doge to tumne toka. Doosre pe 2 second rukoge to agent mara hua lagega.</p></div>
+      <div class="box simple"><span class="k">Hamara tareeka</span><p>Apne LLM se poochte hain: ab tak ke shabdon ke baad "vaakya khatm" aane ki kitni sambhavna hai? Zyada ho to 0.3 s mein jawab; kam ho to 1.5 s tak sabr.</p></div>
+    </div>
+    <div>{{TURN}}<p style="font-size:8.8pt;color:#52514e">Ye numbers is guide ko banate waqt hamare LLM se nikle hain. 10 haath ke likhe udaharan hain: tareeka dikhane ke liye, benchmark nahi.</p></div>
+  </div>
+  <h3>3. State machine aur barge-in</h3>
+  <figure>{{STATES}}</figure>
+  <h3>4. Streaming: poore jawab ka intezaar mat karo</h3>
+  <figure>{{STREAM}}<figcaption>Dono mein kul kaam barabar hai. Fark ye hai ki candidate ko <b>pehli awaaz</b> kab sunai deti hai.</figcaption></figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Radd karna (cancellation)</span><p>Har jawab ka ek number hota hai. User toke to number badal jaata hai, aur purane number wala har kaam khud ruk jaata hai. Isse tooti hui reply baad mein bol nahi padti.</p></div>
+    <div class="box warn"><span class="k">Sachchi baat: echo</span><p>Speaker ki awaaz mic mein wapas jaati hai, to agent khud ko sun ke khud ko tok dega. Phone aur browser ise "echo cancellation" se rokte hain. Is script mein wo nahi hai: headphone lagao.</p></div>
+  </div>
+  <h3>5. Asli teeno models ke saath, naapa hua</h3>
+  {{E2E}}
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"The orchestrator is a three-state machine. Model calls run in worker threads so the event loop keeps reading the microphone, which is what makes barge-in possible. Each reply has a generation counter, so a cancelled reply can never speak later. I test it with fake models of known delay, and end to end with the three trained models."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">8</div><div><h2>Naksha: kaunsi file kya karti hai</h2><div class="file">ye table code se khud bani hai: har file ki pehli line</div></div></div>
+  <p class="lead">Har folder mein files lesson ke order mein hain. Upar ka docstring padho, phir code, phir chalao. Har folder mein ek <code>check.py</code> (jaanch) aur ek <code>GLOSSARY.md</code> (shabd) bhi hai.</p>
+  <div class="box codebox"><span class="k">Khud chalao</span><p><code>cd scratch/stt &amp;&amp; ../../.venv/bin/python audio.py</code> &nbsp;har lesson file aise hi chalti hai aur kuch dikhati hai.<br><code>../../.venv/bin/python check.py</code> &nbsp;har folder ki jaanch, kuch second mein.<br><code>cd scratch/orchestrator &amp;&amp; ../../.venv/bin/python agent.py</code> &nbsp;teeno models se baat karo (headphone lagake).</p></div>
+  {{FILES}}
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">9</div><div><h2>Interview: pitch aur {{N_QA}} sawaal, beginner se advanced</h2><div class="file">har topic teen star mein · pehle simple jawab, phir wo jo bolna hai · source: <code>docs/questions.md</code></div></div></div>
+  <div class="box say"><span class="k">30 second mein</span><p>"I built a voice agent's four parts from scratch in PyTorch. A decoder-only LLM with my own BPE tokenizer. A Conformer-style speech recognizer trained with CTC, where I implemented the loss, beam search and forced alignment. A non-autoregressive TTS with monotonic alignment search and an inverse-STFT vocoder, distilled from a larger teacher. And an orchestrator with VAD, an LLM-based turn detector, streaming and barge-in. It covers Hindi, Marathi, English and Hinglish, the models total {{P_ALL}} parameters, and every module has invariant tests."</p></div>
+
+  <div class="box simple"><span class="k">Jawab dene ka tareeka</span><p><b>1.</b> Pehle ek line mein seedha jawab. <b>2.</b> Phir "kyun". <b>3.</b> Phir apne project ki ek cheez ya ek number ("maine ye banaya aur ye naapa"). Teesri line hi tumhe ratta maarne walon se alag karti hai. Jo nahi pata, wahan bolo: "ye maine nahi banaya, par ye aise kaam karta hai."</p></div>
+  {{QA}}
+  <div class="qa"><div class="q">Aakhri sawaal: ye production mein chalega?</div><p class="hi">Nahi. Ye seekhne ke models hain. Sach bolna hi sahi jawab hai.</p><div class="en">No. They are small and trained on tens of hours. The point was to understand every part; in production I would fine-tune pretrained models.</div></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">10</div><div><h2>Sachchi baatein aur agla kadam</h2><div class="file">jo nahi bana, aur kab banana</div></div></div>
+  <table>
+    <thead><tr><th>Kya nahi hai</th><th>Kyun</th><th>Agla kadam</th></tr></thead>
+    <tbody>
+      <tr><td>Bade models jaisi accuracy</td><td>23.5 ghante data aur {{P_STT}} parameters. Whisper ne 680,000 ghante dekhe.</td><td>Zyada data, ya bade model ke pseudo-labels</td></tr>
+      <tr><td>Streaming STT</td><td>Model poora clip ek saath dekhta hai</td><td>Sirf peeche dekhne wala encoder</td></tr>
+      <tr><td>TTS mein pitch control</td><td>Sirf duration predict hoti hai</td><td>Pitch predictor (FastPitch)</td></tr>
+      <tr><td>GAN wala vocoder</td><td>Sirf spectrum ka loss hai, to halki "buzz" reh sakti hai</td><td>Discriminator jodna</td></tr>
+      <tr><td>Numbers bolna ("2024")</td><td>Text front-end digits nahi kholta</td><td>Number-to-words ka kadam</td></tr>
+      <tr><td>Echo cancellation</td><td>Networking / signal ka kaam hai</td><td>Browser ye muft deta hai</td></tr>
+      <tr><td>Browser mein chalna</td><td>Models ko ONNX mein nikaalna baaki hai</td><td>ONNX export, phir static page pe free hosting</td></tr>
+      <tr><td>Baat-cheet ki yaad</td><td>Scratch LLM ek baari ka hai</td><td>Pichhli baariyan prompt mein jodna</td></tr>
+    </tbody>
+  </table>
+  <div class="box warn"><span class="k">License ki ek baat</span><p>TTS ne Supertonic 3 ki awaaz se seekha hai. Uske Open RAIL-M license ke hisaab se hamara model uska "derivative" hai: uski use-restrictions (jaise kisi ki nakal karke dhokha na dena, aur batana ki awaaz machine ki hai) hamare weights ke saath chalti hain.</p></div>
+  <div class="box good"><span class="k">Seekhne ka kram, agar 7 din hon</span><p><b>Din 1-2:</b> LLM ki zero guide. <b>Din 3:</b> chapters 1-4, saath mein <code>stt/audio.py</code> aur <code>stt/ctc.py</code> chalao. <b>Din 4:</b> <code>stt/model.py</code> aur training ka log. <b>Din 5:</b> TTS, <code>align.py</code> ka demo haath se karo. <b>Din 6:</b> orchestrator, <code>check.py</code> ke scenarios padho. <b>Din 7:</b> 20 sawaal bina dekhe bolo.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">A</div><div><h2>Shabdkosh: {{N_TERMS}} terms</h2><div class="file">har term ke saamne wo jagah jahan tumne use code mein banaya · LLM ke 169 terms uski apni guide mein hain</div></div></div>
+  {{GLOSSARY}}
+</section>
+
+</main>
+</body>
+</html>

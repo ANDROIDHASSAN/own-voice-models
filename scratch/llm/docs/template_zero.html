@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM: zero se interview tak</title>
+{{STYLE}}
+<style>
+.cover { background: linear-gradient(155deg, #0c1a2e 0%, #0e3f3a 55%, #138a63 100%); }
+.cover .tag, .cover h1 span { color: #8fe3c0; } .cover .sub { color: #dcf3ea; } .cover .tile span, .cover .foot { color: #bfe6d6; }
+.ladder { list-style: none; padding: 0; margin: 4mm 0; }
+code { white-space: nowrap; } .story, .chap + .story { break-before: avoid; }
+.ladder li { display: flex; gap: 3mm; align-items: center; padding: 1mm 3mm; margin-bottom: 1mm; border-radius: 7px; background: #f4f6fa; border: 1px solid var(--line); font-size: 9.8pt; break-inside: avoid; }
+.ladder b { flex: none; width: 7.5mm; height: 7.5mm; border-radius: 2mm; background: var(--navy); color: #fff; display: grid; place-items: center; font: 600 9.5pt "Avenir Next", sans-serif; }
+.ladder span { color: var(--sec); margin-left: auto; font-size: 8.8pt; text-align: right; }
+.story { background: #fff8e8; border-radius: 10px; padding: 3.5mm 4.5mm; margin: 3.5mm 0; break-inside: avoid; }
+.story .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8a6200; display: block; margin-bottom: 1mm; }
+.story p:last-child { margin-bottom: 0; }
+.quiz { border: 1.5px dashed #c3c2b7; border-radius: 10px; padding: 3mm 4.5mm; margin: 3.5mm 0; break-inside: avoid; font-size: 9.6pt; }
+.quiz .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--sec); display: block; margin-bottom: 1mm; }
+.quiz p { margin: 0 0 1.2mm; } .quiz i { color: var(--sec); font-style: normal; } .quiz i::before { content: "Jawab: "; font-weight: 600; color: #0b6e4b; }
+.eq { font: 12.5pt "SF Mono", Menlo, monospace; text-align: center; background: var(--wash); border: 1px solid var(--line); border-radius: 8px; padding: 3mm; margin: 3mm 0; break-inside: avoid; }
+.vec { display: inline-flex; gap: 1mm; vertical-align: middle; } .vec span { background: #e6f0fc; border: 1px solid #b7d3f6; border-radius: 4px; padding: .3mm 2mm; font: 9.6pt "SF Mono", Menlo, monospace; }
+.grid3 { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 1mm; vertical-align: middle; } .grid3 span { background: #e3f6ee; border: 1px solid #a9dfc8; border-radius: 4px; padding: .3mm 2mm; font: 9.6pt "SF Mono", Menlo, monospace; text-align: right; }
+.words td:first-child { font-weight: 600; width: 44mm; }
+.qa .hi { color: #23221f; margin-bottom: 1mm; } .qa .hi::before { content: "SIMPLE  "; font: 600 7.4pt "Avenir Next", sans-serif; letter-spacing: .1em; color: #8a6200; }
+.script p { margin-bottom: 2mm; } .script b { color: #9ec5f4; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tag">Bilkul shuruaat se · koi pehle ka gyaan nahi chahiye</div>
+  <h1>LLM: zero se<br><span>interview tak.</span></h1>
+  <div class="sub">Agar tumhe abhi kuch nahi aata, ye guide tumhare liye hai. 10 seedhiyan, har ek pichhli pe khadi. Har seedhi pe ek kahani, ek chhota hisaab jo tum haath se kar sakte ho, aur wo line jo interview mein bolni hai.</div>
+  <div class="tiles">
+    <div class="tile"><b>10</b><span>seedhiyan: number se interview tak</span></div>
+    <div class="tile"><b>7</b><span>hisaab haath se, kadam-dar-kadam</span></div>
+    <div class="tile"><b>25</b><span>interview sawaal, do tarah ke jawab ke saath</span></div>
+  </div>
+  <div class="foot"><span>Chhotu GPT · own-voice-models / scratch / llm</span><span>Saare asli numbers isi project ke model se hain</span></div>
+</div>
+
+<main>
+
+<section class="page">
+  <h2>Pehle ye padho</h2>
+  <p class="lead">Tum 10 seedhiyan chadhoge. Koi seedhi mat chhodna: har ek pichhli pe tiki hai. Jahan atko, wahin ruko aur us seedhi ka hisaab khud kaagaz pe karo.</p>
+  <ul class="ladder">
+    <li><b>0</b>Computer sirf numbers samajhta hai<span>number, vector, matrix</span></li>
+    <li><b>1</b>Model = knobs wali machine<span>parameter, prediction</span></li>
+    <li><b>2</b>Seekhna = galti naapo, knob ghumao<span>loss, gradient, backprop</span></li>
+    <li><b>3</b>Text ko numbers kaise banate hain<span>token, BPE, embedding</span></li>
+    <li><b>4</b>LLM ka asli khel: agla shabd batao<span>logits, softmax</span></li>
+    <li><b>5</b>Attention: shabd ek doosre ko dekhte hain<span>query, key, value, mask</span></li>
+    <li><b>6</b>Transformer: sab ko jodna<span>block, residual, norm</span></li>
+    <li><b>7</b>Training: random se bhasha tak<span>cross-entropy, overfitting</span></li>
+    <li><b>8</b>Bolna: numbers se vaakya<span>temperature, top-k, KV cache</span></li>
+    <li><b>9</b>Kaam ka banana<span>fine-tuning, LoRA, quantization</span></li>
+    <li><b>10</b>Interview ke liye tayyar<span>pitch, 25 sawaal, 7 din ka plan</span></li>
+  </ul>
+  <div class="cols2">
+    <div class="story"><span class="k">Kahani</span><p>Har seedhi ek rozmarra ki kahani se shuru hoti hai. Pehle kahani samjho, phir asli naam.</p></div>
+    <div class="box simple"><span class="k">Haath se hisaab</span><p>Chhote numbers ke saath wahi cheez jo model crore numbers ke saath karta hai.</p></div>
+    <div class="box say"><span class="k">Interview mein bolo</span><p>Wahi baat, English mein, jaise interview mein bolni hai.</p></div>
+    <div class="quiz"><span class="k">Khud se poocho</span><p>Jawab dhak kar pehle khud socho. Bina iske seekhna pakka nahi hota.</p></div>
+  </div>
+  <div class="box warn"><span class="k">Ek sachchi baat pehle hi</span><p>Is guide ka model (Chhotu GPT) chhota hai: wo bachchon ki kahaniyan aur chhoti Hinglish baat likhta hai, ChatGPT jaisa nahi hai. Par andar ki machine <b>bilkul wahi</b> hai. Jo yahan samjhoge, wahi bade models mein hai, bas zyada bada.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">0</div><div><h2>Computer sirf numbers samajhta hai</h2><div class="file">seedhi 0 · yahan se sab shuru hota hai</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Tumhara dost sirf ginti jaanta hai. Use tumhe ek photo, ek gaana aur ek chitthi samjhani hai. Tum kya karoge? Sab kuch ginti mein badloge. Computer wahi dost hai.</p></div>
+  <p>Computer ke andar shabd, tasveer ya awaaz nahi hoti. Sirf numbers hote hain. Isliye AI ka pehla kaam hamesha yahi hai: <b>cheez ko numbers mein badlo.</b></p>
+  <table class="words">
+    <thead><tr><th>Cheez</th><th>Numbers mein kaise</th><th>Dikhne mein</th></tr></thead>
+    <tbody>
+      <tr><td>Ek rang</td><td>3 numbers: kitna laal, hara, neela</td><td><span class="vec"><span>255</span><span>120</span><span>0</span></span> = naarangi</td></tr>
+      <tr><td>Ek photo</td><td>Har bindu ka rang, ek badi table mein</td><td>lakhon numbers</td></tr>
+      <tr><td>Awaaz</td><td>Har pal hawa kitni hili, ek lambi list</td><td>ek second = 16,000 numbers</td></tr>
+      <tr><td>Ek shabd</td><td>Seedhi 3 mein dekhenge</td><td>384 numbers</td></tr>
+    </tbody>
+  </table>
+  <h3>Teen shakal jo baar-baar aayengi</h3>
+  <table class="words">
+    <thead><tr><th>Naam</th><th>Kya hai</th><th>Aisa dikhta hai</th></tr></thead>
+    <tbody>
+      <tr><td>Number (scalar)</td><td>Ek akela number</td><td><span class="vec"><span>0.8</span></span></td></tr>
+      <tr><td>Vector</td><td>Numbers ki ek line (list)</td><td><span class="vec"><span>0.2</span><span>-1.3</span><span>0.8</span></span></td></tr>
+      <tr><td>Matrix</td><td>Numbers ki table (rows aur columns)</td><td><span class="grid3"><span>1</span><span>0</span><span>2</span><span>-1</span><span>3</span><span>0.5</span></span></td></tr>
+      <tr><td>Tensor</td><td>In sabka aam naam: number, list, table, ya table ki gaddi</td><td>PyTorch mein sab kuch tensor hai</td></tr>
+    </tbody>
+  </table>
+  <div class="box simple"><span class="k">Vector ko aise socho</span><p>Vector ek cheez ka "pata" hai. Jaise ghar ka pata do numbers se milta hai (kitna uttar, kitna poorab), waise hi ek shabd ka pata 384 numbers se milta hai. Jin shabdon ka matlab milta hai, unke pate paas-paas hote hain.</p></div>
+  <div class="box good"><span class="k">Ab tumhe pata hai</span><ul><li>AI mein har cheez pehle numbers banti hai.</li><li>Vector = numbers ki line. Matrix = numbers ki table.</li><li>"Dimension" = us line mein kitne numbers hain. Hamare model mein 384.</li></ul></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> <span class="vec"><span>3</span><span>7</span><span>1</span><span>9</span></span> kya hai, aur iska dimension kya hai? <i>Vector. Dimension 4.</i></p>
+    <p><b>2.</b> Model shabd "billi" ko seedha kyun nahi padh sakta? <i>Kyunki wo sirf numbers pe hisaab karta hai. Pehle shabd ko numbers banana padega.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">1</div><div><h2>Model = knobs wali machine</h2><div class="file">seedhi 1 · model, parameter, prediction</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Purane radio mein knob ghumate the. Galat jagah pe sirf shor aata tha, sahi jagah pe gaana. Radio wahi tha; bas knob ki <b>setting</b> badli. AI model bhi aisi hi machine hai, bas isme crore knobs hain.</p></div>
+  <figure>{{MACHINE}}<figcaption>Input andar jaata hai, knobs ke hisaab se hisaab hota hai, output bahar aata hai. <b>Knobs badlo to jawab badal jaata hai.</b></figcaption></figure>
+  <h3>Sabse chhota model, haath se</h3>
+  <p>Maan lo machine mein sirf ek knob hai, naam <code>w</code>. Machine bas itna karti hai:</p>
+  <div class="eq">output = w × input</div>
+  <table>
+    <thead><tr><th class="r">Input</th><th class="r">Sahi jawab</th><th class="r">w = 1 pe machine</th><th class="r">w = 2 pe</th><th class="r">w = 3 pe</th></tr></thead>
+    <tbody>
+      <tr><td class="r">2</td><td class="r">6</td><td class="r">2</td><td class="r">4</td><td class="r"><b>6</b></td></tr>
+      <tr><td class="r">5</td><td class="r">15</td><td class="r">5</td><td class="r">10</td><td class="r"><b>15</b></td></tr>
+    </tbody>
+  </table>
+  <p>Knob 3 pe machine har baar sahi hai. Yaani machine ne "3 se guna karna" <b>seekh liya</b>. Kisi ne use ye niyam bataya nahi; bas knob sahi jagah pahunch gaya.</p>
+  <div class="box simple"><span class="k">Poora AI isi ek line mein hai</span><p><b>Seekhna = knobs ki wo setting dhoondhna jisse jawab sahi aayen.</b> Chhotu GPT mein 1 crore 22 lakh knobs hain. ChatGPT jaise models mein arbon. Tareeka wahi hai.</p></div>
+  <table class="words">
+    <thead><tr><th>Naya shabd</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Model</td><td>Knobs wali machine: input lo, hisaab karo, output do</td></tr>
+      <tr><td>Parameter / weight</td><td>Ek knob. Ek number jo seekha jaata hai</td></tr>
+      <tr><td>Prediction</td><td>Machine ka jawab (andaza)</td></tr>
+      <tr><td>Training</td><td>Knobs ko sahi jagah le jaana</td></tr>
+      <tr><td>Inference</td><td>Train ho chuki machine ko use karna (knobs ab nahi hilte)</td></tr>
+    </tbody>
+  </table>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"A neural network is a function with millions of adjustable numbers called parameters. Training means finding the parameter values that make its outputs match the data."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Input 4 pe sahi jawab 20 hai. Knob <code>w</code> kya hona chahiye? <i>5, kyunki 5 × 4 = 20.</i></p>
+    <p><b>2.</b> Training aur inference mein fark? <i>Training mein knobs badalte hain. Inference mein knobs jame rehte hain, bas jawab nikalte hain.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">2</div><div><h2>Seekhna = galti naapo, knob ghumao</h2><div class="file">seedhi 2 · loss, gradient, learning rate, backpropagation</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Aankh pe patti baandh kar tumhe pahaad se neeche ghaati mein utarna hai. Tum pair se zameen ka dhalaan mehsoos karte ho aur neeche ki taraf ek kadam lete ho. Phir dobara. Dheere-dheere tum sabse neeche pahunch jaate ho.</p></div>
+  <table class="words">
+    <thead><tr><th>Kahani mein</th><th>Asli naam</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Kitni oonchai pe ho</td><td>Loss</td><td>Ek number: machine kitni galat hai. Zero = bilkul sahi</td></tr>
+      <tr><td>Zameen ka dhalaan</td><td>Gradient</td><td>Knob ko thoda badhaun to galti badhegi ya ghategi</td></tr>
+      <tr><td>Kadam kitna bada</td><td>Learning rate</td><td>Ek baar mein knob kitna ghumana hai</td></tr>
+      <tr><td>Neeche ki taraf chalna</td><td>Gradient descent</td><td>Knob ko dhalaan ke ulte taraf ghumana</td></tr>
+    </tbody>
+  </table>
+  <h3>Haath se hisaab: ek knob ko sahi jagah le jaana</h3>
+  <p>Sahi knob <b>3</b> hai, par machine ko nahi pata. Wo 0 se shuru karti hai. Galti naapne ka niyam: <code>loss = (w − 3)²</code>. Kadam ka size (learning rate) 0.25.</p>
+  {{GD_TABLE}}
+  <p>Har kadam pe ek hi kaam: <code>naya w = purana w − 0.25 × gradient</code>. Dekho galti 9 se 0.01 tak aa gayi, sirf 5 kadam mein. Gradient minus hai to knob badhao, plus hai to ghatao.</p>
+  <figure><div class="fig-t">Wahi hisaab, tasveer mein</div>{{GD_CHART}}<figcaption>Neeli line ghaati hai (har knob value pe galti). Naarangi bindu hamare kadam hain: 0 se shuru, har kadam ghaati ke tal (w = 3) ke paas. Kadam chhote hote jaate hain kyunki tal ke paas dhalaan kam hai.</figcaption></figure>
+</section>
+
+<section class="flow">
+  <div class="cols2">
+    <div class="box warn"><span class="k">Kadam bahut bada ho to</span><p>Tum ghaati ke paar kood jaate ho, phir wapas, har baar aur door. Galti ghatne ki jagah badhti hai. Is project mein ye sach mein hua: learning rate 0.1 pe loss infinity ho gaya, 0.05 pe theek chala. Ise <b>divergence</b> kehte hain.</p></div>
+    <div class="box simple"><span class="k">Kadam bahut chhota ho to</span><p>Tum sahi disha mein ho par cheenti ki chaal se. Training bahut lambi ho jaati hai. Learning rate chunna ek kala hai: na bahut bada, na bahut chhota.</p></div>
+  </div>
+  <h3>Par 1 crore knobs ka kya? Backpropagation</h3>
+  <p>Ek knob ka dhalaan nikalna aasaan tha. Par jab crore knobs hon aur wo ek ke baad ek jude hon, to kaise pata chale ki galti mein <b>kis knob ka kitna haath</b> hai?</p>
+  <div class="story"><span class="k">Kahani</span><p>Cricket team haar gayi. Coach aakhri over se peeche ki taraf jaata hai: "ye run kisne diye? usse pehle catch kisne chhoda?" Har khiladi ko uske hisse ki zimmedari milti hai. Backpropagation yahi hai: galti ko aakhir se shuru karke peeche ki taraf baantna.</p></div>
+  <figure>{{GRAPH}}<figcaption><b>Forward:</b> baayein se daayein hisaab karke loss nikala. <b>Backward:</b> loss se ulta chalkar har number se poocha "tumhe badalne se loss kitna badlega". Ganit mein ise <b>chain rule</b> kehte hain.</figcaption></figure>
+  <div class="box good"><span class="k">Ab tumhe pata hai: training ke 4 kadam</span><ul><li><b>Forward pass:</b> input daalo, jawab nikalo.</li><li><b>Loss:</b> jawab kitna galat hai, ek number.</li><li><b>Backward pass:</b> har knob ka dhalaan (gradient) nikalo.</li><li><b>Update:</b> har knob ko dhalaan ke ulte taraf thoda ghumao. Phir dobara.</li></ul></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Training minimizes a loss function with gradient descent. Backpropagation computes the gradient of the loss for every parameter by applying the chain rule backwards through the computation graph. Then each parameter moves a small step against its gradient, scaled by the learning rate."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Table mein kadam 1 pe w = 1.50 aur gradient = −3.00 hai. Agla w khud nikalo. <i>1.50 − 0.25 × (−3.00) = 1.50 + 0.75 = 2.25. Table se milao.</i></p>
+    <p><b>2.</b> Gradient zero ho to kya matlab? <i>Zameen seedhi hai: tum ghaati ke tal pe ho, ab knob nahi hilega.</i></p>
+    <p><b>3.</b> Backpropagation kya nikalta hai? <i>Har parameter ka gradient: loss mein us parameter ka kitna haath hai.</i></p>
+  </div>
+  <div class="box codebox"><span class="k">Code mein dekho</span><p><code>autograd.py</code> ye sab 100 line mein, bina kisi library ke banata hai. <code>python autograd.py</code> chalao: wo XOR naam ki paheli seekhta hai aur loss 0.478 se 0.0000 tak jaata hai.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">3</div><div><h2>Text ko numbers kaise banate hain</h2><div class="file">seedhi 3 · token, BPE, vocabulary, embedding</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Lego ke dabbe mein agar har cheez ka alag tukda ho (ek poori gaadi, ek poora ghar) to lakhon tukde chahiye. Agar sirf sabse chhoti eent ho to ek ghar banane mein hazaaron lagengi. Samajhdaar dabba beech ka hota hai: kuch chhoti eentein, kuch bane-banaye hisse. Token wahi beech wala tukda hai.</p></div>
+  <table>
+    <thead><tr><th>Tukda kya ho</th><th>Dikkat</th></tr></thead>
+    <tbody>
+      <tr><td>Har <b>akshar</b></td><td>"namaste" = 7 tukde. Vaakya bahut lamba ho jaata hai, model ke liye mushkil</td></tr>
+      <tr><td>Har <b>shabd</b></td><td>Lakhon shabd yaad rakhne padenge. Naya shabd aaya to model atak gaya</td></tr>
+      <tr><td><b>Token</b> (beech ka)</td><td>Aam shabd poora ek tukda, mushkil shabd 2-3 tukdon mein. Sab LLM yahi karte hain</td></tr>
+    </tbody>
+  </table>
+  <h3>Haath se hisaab: BPE (tokens kaise bante hain)</h3>
+  <p>Niyam ek hi hai: <b>jo do tukde sabse zyada baar saath aate hain, unhe jod kar ek bana do. Dobara. Dobara.</b> Hamne apne asli tokenizer ko ye chhota sa text diya: <code>aam aam aam kaam kaam naam</code></p>
+  {{BPE_STEPS}}
+  <p>Ab wo "aam kaam naam" ko aise todta hai: {{BPE_RESULT}}</p>
+  <div class="box simple"><span class="k">Dhyaan se dekho</span><p>"aam" aur "kaam" poore ek-ek token ban gaye kyunki wo baar-baar aaye. "naam" sirf ek baar aaya, isliye wo "n" + "aam" mein toota. <b>BPE ko shabd ka matlab nahi pata, use sirf ginti pata hai.</b> ⎵ ka matlab space hai.</p></div>
+  <figure><div class="fig-t">Hamara asli tokenizer (3,835 merges ke baad) asli vaakyon pe</div>{{TOKCHIPS}}<figcaption>Poore model ki vocabulary 4,096 tokens ki hai. Har token ka ek number (id) hai. Model ko yahi ids milte hain.</figcaption></figure>
+</section>
+
+<section class="flow">
+  <h3>Embedding: token ka "pata"</h3>
+  <p>Token id sirf ek ginti hai (jaise roll number). Usme koi matlab nahi. Isliye har token ko ek <b>vector</b> diya jaata hai: 384 numbers jo uska "pata" hain. Ye numbers bhi knobs hain, yaani training mein seekhe jaate hain.</p>
+  <figure><div class="fig-t">Agar pata sirf 2 numbers ka hota (samjhane ke liye banayi tasveer)</div>{{EMBED}}<figcaption>Asal mein 384 numbers hote hain, jo kaagaz pe nahi ban sakte. Par baat wahi hai: training ke baad milte-julte shabd paas aa jaate hain.</figcaption></figure>
+  <table class="words">
+    <thead><tr><th>Naya shabd</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Token</td><td>Text ka tukda jo model ek unit maanta hai</td></tr>
+      <tr><td>Tokenizer</td><td>Text ko tokens mein todne wala, aur wapas jodne wala</td></tr>
+      <tr><td>BPE (byte-pair encoding)</td><td>Sabse aam jode ko baar-baar jodne ka tareeka</td></tr>
+      <tr><td>Vocabulary</td><td>Saare tokens ki list. Hamari 4,096</td></tr>
+      <tr><td>Special token</td><td>Haath se daale gaye nishaan: shuruaat, ant, bhasha ka tag</td></tr>
+      <tr><td>Embedding</td><td>Har token ka seekha hua vector. 4,096 × 384 ki ek table</td></tr>
+    </tbody>
+  </table>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Text is split into subword tokens with byte-pair encoding, which repeatedly merges the most frequent adjacent pair. Each token id then looks up a learned embedding vector. Subwords keep the vocabulary small and still handle words the model has never seen."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Upar wale chhote tokenizer mein "kaam" ek token hai par "naam" nahi. Kyun? <i>"kaam" do baar aaya, "naam" ek baar. BPE zyada aane wale jodon ko pehle jodta hai.</i></p>
+    <p><b>2.</b> Embedding table mein kitne numbers hain? <i>4,096 × 384 = 15,72,864.</i></p>
+    <p><b>3.</b> Naya shabd aaye jo kabhi nahi dekha, to kya hoga? <i>Wo chhote tukdon mein toot jaayega. Hamara BPE bytes se shuru hota hai, isliye kuch bhi encode ho sakta hai.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">4</div><div><h2>LLM ka asli khel: agla shabd batao</h2><div class="file">seedhi 4 · language model, logits, softmax, probability</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Main bolta hun "do aur do hote hain…" aur tum turant bolte ho "chaar". "Twinkle twinkle little…" "star". Tumne ye khel bachpan se itna khela ki bhasha aa gayi. LLM sirf yahi ek khel khelta hai, crore baar: <b>ab tak ke shabd dekho, agla batao.</b></p></div>
+  <p>Par model ek shabd nahi bolta. Wo vocabulary ke <b>har</b> token ko ek number deta hai: "iske agla hone ka kitna chance hai". Ye do chart hamare asli model ke hain:</p>
+  <div class="cols2">
+    <figure><div class="fig-t">"एक दिन राजू ने अपनी माँ से कहा" ke baad</div>{{NEXT_HI}}<figcaption>Model pakka hai: "कहा" ke baad "कि" hi aata hai.</figcaption></figure>
+    <figure><div class="fig-t">"aaj office mein" ke baad</div>{{NEXT_HING}}<figcaption>Yahan kai jawab chal sakte hain, to bharosa bata hua hai.</figcaption></figure>
+  </div>
+  <h3>Haath se hisaab: softmax (scores ko chance mein badalna)</h3>
+  <p>Model pehle kachche scores deta hai, jinhe <b>logits</b> kehte hain. Wo kuch bhi ho sakte hain: 2.0, −5, 100. Unhe chance banane ke liye teen kaam: (1) har score ka <code>e^score</code> nikalo, (2) sabko jodo, (3) har ek ko jod se bhaag do.</p>
+  {{SOFTMAX}}
+  <p>Teeno jodo: 66 + 24 + 10 = 100%. Yahi softmax ka kaam hai: <b>bade score ko bada chance, aur sab milkar 100%.</b></p>
+  <figure><div class="fig-t">Poora safar ek tasveer mein</div>{{FLOW}}<figcaption>Text → tokens → vectors → 6 blocks (agli do seedhiyan) → har token ka score → ek token chuno → use jod kar dobara. Is "dobara" ko <b>autoregressive</b> kehte hain.</figcaption></figure>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"A language model outputs a probability distribution over the next token given the previous tokens. The network produces raw scores called logits, and softmax turns them into probabilities. Generating text is just sampling a token, appending it, and repeating."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> LLM ek baar mein kya deta hai: ek shabd ya kuch aur? <i>Har token ki probability. Shabd hum chunte hain.</i></p>
+    <p><b>2.</b> Logits aur probability mein fark? <i>Logits kachche scores hain, kuch bhi ho sakte hain. Probability 0 se 1 ke beech hoti hai aur sab milkar 1.</i></p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">5</div><div><h2>Attention: shabd ek doosre ko dekhte hain</h2><div class="file">seedhi 5 · query, key, value, mask · sabse zaroori seedhi</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>"Raju ne aam khaya kyunki <b>wo</b> bhookha tha." Yahan "wo" kaun hai? Raju, aam nahi. Tumne ye kaise jaana? Tumne peeche mudkar "Raju" ko dekha. Shabd ka matlab akele nahi banta; wo doosre shabdon ko dekh kar banta hai. Attention model ko yahi "mudkar dekhna" sikhata hai.</p></div>
+  <div class="box simple"><span class="k">Class wali kahani: query, key, value</span><p>Class mein har bachcha (shabd) teen cheezein rakhta hai. <b>Query</b> = uska sawaal ("mujhe kiski baat chahiye?"). <b>Key</b> = uske maathe ki parchi ("mere paas ye hai"). <b>Value</b> = uski asli jaankari. Jis bachche ki parchi mere sawaal se milti hai, main uski jaankari zyada leta hun.</p></div>
+  <h3>Haath se hisaab: "billi doodh peeti"</h3>
+  <p>Shabd "peeti" sochta hai: kisko dekhun? Uski query maan lo <span class="vec"><span>1</span><span>2</span></span> hai. (Ye numbers samjhane ke liye chune hain; hisaab asli hai.)</p>
+  {{ATTN_TABLE}}
+  <p><b>Kadam 1:</b> query aur har key ka guna karke jodo (dot product). "doodh": 1×1 + 2×3 = 7. <b>Kadam 2:</b> √2 se bhaag. <b>Kadam 3:</b> softmax, taaki sab milkar 100% ho. <b>Kadam 4:</b> har value ko uske % se guna karke jodo.</p>
+  <p>Nateeja: "peeti" ka {{ATTN_TOP}} dhyaan "doodh" pe gaya, aur usne naya vector banaya <span class="vec"><span>{{ATTN_MIX}}</span></span>, jo lagbhag "doodh" ki value hai. Ab "peeti" ke andar ye jaankari hai ki <b>kya</b> piya ja raha hai.</p>
+  <figure><div class="fig-t">Wahi 4 kadam, tasveer mein</div>{{ATTN}}</figure>
+</section>
+
+<section class="flow">
+  <h3>Teen sawaal jo interviewer zaroor poochta hai</h3>
+  <div class="cols2">
+    <div class="box simple"><span class="k">√ se bhaag kyun</span><p>Lambe vectors ka guna bahut bada number deta hai. Bade numbers pe softmax ek ko 100% aur baaki ko 0 de deta hai. Tab model seekhna band kar deta hai. Bhaag dene se numbers kaabu mein rehte hain.</p></div>
+    <div class="box simple"><span class="k">Kai heads kyun</span><p>Ek head ek hi rishta dekh sakta hai. Hamare model mein 6 heads ek saath chalte hain: koi "kisne" dekhta hai, koi "kya", koi pichhla shabd. Phir sabka nateeja jud jaata hai.</p></div>
+  </div>
+  <figure><div class="fig-t">Mask: aage dekhna mana hai</div>{{MASK}}<figcaption>Model ka kaam agla shabd batana hai. Agar wo agla shabd dekh le to bas nakal karega, kuch seekhega nahi. Isliye har shabd sirf apne se <b>pehle</b> wale shabd dekh sakta hai.</figcaption></figure>
+  <figure><div class="fig-t">Order kaise pata chalta hai: RoPE</div>{{ROPE}}<figcaption>Attention ko apne aap nahi pata ki kaunsa shabd pehle aaya. "Raju ne sher ko maara" aur "sher ne Raju ko maara" use ek jaise lagte. Isliye har shabd ke vector ko uski jagah ke hisaab se ghadi ki sui ki tarah ghuma dete hain. Do shabdon ke beech ki <b>doori</b> phir unke guna mein dikhti hai.</figcaption></figure>
+  <figure><div class="fig-t">Asli model ka attention, "एक दिन राजू ने अपनी माँ से कहा" padhte waqt</div>{{HEAT}}<figcaption>Har row ek shabd hai; numbers batate hain wo kis pichhle shabd ko kitna % dekh raha hai. Aakhri shabd "कहा" sabse zyada dekhta hai: <b>{{HEAT_LAST}}</b>. Upar-daayein ka khaali kona mask hai.</figcaption></figure>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"In self-attention every token makes a query, a key and a value. The score between two tokens is the dot product of the query and the key, scaled by the square root of the dimension. Softmax turns scores into weights, and the output is the weighted sum of the values. A causal mask hides future tokens, and multiple heads run in parallel to capture different relations."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Table mein "billi" ka Query · Key khud nikalo. <i>1×2 + 2×1 = 4.</i></p>
+    <p><b>2.</b> Mask hata dein to kya hoga? <i>Model training mein agla shabd dekh kar nakal karega. Loss bahut kam dikhega par wo kuch likh nahi paayega.</i></p>
+    <p><b>3.</b> Query, key, value mein se "asli jaankari" kaun le jaata hai? <i>Value. Query aur key sirf ye tay karte hain ki kiski value kitni milegi.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">6</div><div><h2>Transformer: sab ko jodna</h2><div class="file">seedhi 6 · block, residual connection, normalization, feed-forward</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek copy 6 teachers ke paas baari-baari jaati hai. Har teacher pehle poori class ki copies dekhta hai (attention), phir apni samajh se kuch sochta hai (feed-forward), aur copy mein <b>naya note jodta hai</b>. Wo purana likha mitata nahi. 6 teachers ke baad copy mein bahut gehri samajh hoti hai.</p></div>
+  <figure><div class="fig-t">Poora model, aur ek block ke andar</div>{{ARCH}}</figure>
+  <table class="words">
+    <thead><tr><th>Hissa</th><th>Kahani mein</th><th>Kyun zaroori</th></tr></thead>
+    <tbody>
+      <tr><td>Attention</td><td>Doosron ki copies dekhna</td><td>Shabd ek doosre se jaankari lete hain</td></tr>
+      <tr><td>Feed-forward</td><td>Akele baith kar sochna</td><td>Mili jaankari pe kaam karna. Sabse zyada knobs yahin</td></tr>
+      <tr><td>Residual (skip) connection</td><td>Note <b>jodna</b>, mitana nahi</td><td>Iske bina 6 layers ke baad seekhne ka signal kho jaata hai</td></tr>
+      <tr><td>Normalization (RMSNorm)</td><td>Sabki awaaz ek volume pe karna</td><td>Numbers bahut bade ya chhote na ho jaayen</td></tr>
+      <tr><td>LM head</td><td>Aakhir mein jawab likhna</td><td>384 numbers ko 4,096 scores mein badalta hai</td></tr>
+    </tbody>
+  </table>
+  <div class="eq">x = x + attention(norm(x))<br>x = x + feed_forward(norm(x))</div>
+  <p>Ye do line ek poora block hain. <code>x = x + …</code> hi wo "note jodna" hai. Is model mein ye 6 baar hota hai.</p>
+  <h3>Haath se hisaab: 1.2 crore knobs kahan se aaye</h3>
+  {{PARAM_WALK}}
+  <div class="box simple"><span class="k">Ye ginti kyun karo</span><p>Interviewer aksar poochta hai "parameters kahan hain?". Jawab: sabse zyada feed-forward mein (har block ka do-tihai). Aur ye ginti asli model se milti hai: <code>build.py</code> dono ko milakar hi PDF banata hai.</p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"A transformer block is two sub-layers, attention and a feed-forward network, each wrapped in a residual connection with normalization before it. Attention moves information between tokens, the feed-forward layer transforms each token on its own, and the residual path lets gradients flow so deep stacks can train."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Residual connection hata dein to kya dikkat? <i>Gehre model mein gradient neeche tak nahi pahunchta, training atak jaati hai.</i></p>
+    <p><b>2.</b> Attention aur feed-forward mein ek line ka fark? <i>Attention shabdon ke beech jaankari le jaata hai; feed-forward har shabd pe alag se kaam karta hai.</i></p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">7</div><div><h2>Training: random se bhasha tak</h2><div class="file">seedhi 7 · cross-entropy, validation, overfitting</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek bachche ko kahaniyon ki kitaab do aur ek khel khilao: main ek line padhunga aur ek shabd pe rukunga, tum agla shabd batao. Galat bataya to main sahi bata dunga. Laakhon baar ye khel khelne ke baad bachcha khud kahani bana lega. Kisi ne use grammar nahi sikhayi.</p></div>
+  <div class="box simple"><span class="k">Sawaal-jawab muft mein milte hain</span><p>Ek vaakya "एक दिन राजू ने कहा" se kai sawaal bante hain: "एक" → "दिन". "एक दिन" → "राजू". "एक दिन राजू" → "ने". Kisi insaan ko jawab likhna nahi pada; jawab text mein hi hai. Ise <b>self-supervised learning</b> kehte hain.</p></div>
+  <figure>{{LOOP}}<figcaption>Wahi 4 kadam jo seedhi 2 mein ek knob ke saath kiye the, ab 1.2 crore knobs ke saath, 4,000 baar.</figcaption></figure>
+  <h3>Haath se hisaab: galti kaise naapte hain (cross-entropy)</h3>
+  <p>Niyam: dekho model ne <b>sahi</b> shabd ko kitna chance diya, aur uska <code>−ln</code> lo.</p>
+  {{CE}}
+  <p>Aakhri line dhyaan se dekho. Bina seekha model har token ko barabar chance deta hai (1/4096), to uska loss <b>8.32</b> hona chahiye. Hamare model ka pehla loss <b>8.37</b> aaya. Yaani code sahi hai. Ye sabse sasta check hai, aur interview mein ye batana bahut achha lagta hai.</p>
+  <figure><div class="fig-t">Hamare model ki asli training</div>{{LOSS}}<figcaption>Loss 8.37 se shuru hua (chart ke upar, bahar) aur 1.88 tak aaya. Neela = jis text pe seekh raha hai. Naarangi = wo text jo usne kabhi nahi dekha.</figcaption></figure>
+</section>
+
+<section class="flow">
+  <h3>Ratta ya samajh? Overfitting</h3>
+  <div class="story"><span class="k">Kahani</span><p>Do bachche exam ki tayyari karte hain. Ek pichhle saal ke paper ke jawab ratta maar leta hai. Doosra samajh kar padhta hai. Wahi paper aaya to dono pass. <b>Naya</b> paper aaya to ratta wala fail. Model bhi ratta maar sakta hai.</p></div>
+  <table class="words">
+    <thead><tr><th>Naam</th><th>Kya hai</th><th>Hamare model mein</th></tr></thead>
+    <tbody>
+      <tr><td>Train loss</td><td>Jis text pe seekha, us pe galti</td><td>1.69</td></tr>
+      <tr><td>Validation (val) loss</td><td>Naye, andekhe text pe galti. Asli imtihaan</td><td>1.88</td></tr>
+      <tr><td>Overfitting</td><td>Train loss girta rahe par val loss badhne lage: ratta</td><td>nahi hui, fark sirf 0.19</td></tr>
+      <tr><td>Perplexity</td><td>e^loss. "Model kitne options mein uljha hai"</td><td>6.5 (random model: 4,096)</td></tr>
+    </tbody>
+  </table>
+  <h3>Training ko theek chalane wale 4 sahaayak</h3>
+  <table class="words">
+    <thead><tr><th>Naam</th><th>Simple matlab</th></tr></thead>
+    <tbody>
+      <tr><td>AdamW (optimizer)</td><td>Samajhdaar knob ghumane wala: har knob ka apna kadam, aur pichhli disha yaad rakhta hai</td></tr>
+      <tr><td>Warmup</td><td>Shuru mein chhote kadam, kyunki naya model bilkul andha hota hai</td></tr>
+      <tr><td>Cosine decay</td><td>Aakhir ki taraf kadam chhote karna, taaki tal pe tik sake</td></tr>
+      <tr><td>Gradient clipping</td><td>Agar dhalaan achanak bahut bada aaye to use kaat do, taaki ek kharab batch sab na bigaade</td></tr>
+    </tbody>
+  </table>
+  <figure><div class="fig-t">Kadam ka size waqt ke saath (asli run)</div>{{LR}}</figure>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Training is self-supervised next-token prediction with cross-entropy loss. I checked that the starting loss was close to the log of the vocabulary size, used AdamW with warmup and cosine decay plus gradient clipping, and held out two percent of the data to watch validation loss for overfitting. Loss went from 8.37 to 1.88."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Model ne sahi shabd ko 50% diya. Loss? <i>0.69 (table dekho).</i></p>
+    <p><b>2.</b> Train loss 0.5, val loss 3.0. Kya hua? <i>Overfitting. Model ne training text ratta maar liya, naye text pe kharab hai.</i></p>
+    <p><b>3.</b> Vocabulary 4,096 ho to pehla loss kitna aana chahiye, aur kyun? <i>ln(4096) = 8.32, kyunki bina seekha model sabko barabar chance deta hai.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">8</div><div><h2>Bolna: numbers se vaakya</h2><div class="file">seedhi 8 · sampling, temperature, top-k, top-p, KV cache</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Model ke paas ek thaila hai jisme har shabd ki parchiyan hain; zyada chance wale shabd ki zyada parchiyan. Hum aankh band karke ek parchi nikalte hain. Hamesha sabse zyada parchi wala shabd lein to baat ubaau aur repeat hoti hai. Thoda chance dein to baat zinda lagti hai.</p></div>
+  <figure><div class="fig-t">Temperature: thaile ko hilana (asli model, prompt "aaj office mein")</div>{{TEMP}}<figcaption>Kam temperature: sabse likely shabd aur bhaari. Zyada temperature: sab barabar hone lagte hain, model "creative" par galat bhi.</figcaption></figure>
+  <table class="words">
+    <thead><tr><th>Tareeka</th><th>Simple matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Greedy</td><td>Hamesha sabse zyada chance wala shabd. Safe par ubaau</td></tr>
+      <tr><td>Temperature</td><td>Chances ko nukeela ya chapta karna</td></tr>
+      <tr><td>Top-k</td><td>Sirf upar ke k shabd rakho, baaki phenk do</td></tr>
+      <tr><td>Top-p</td><td>Upar se utne shabd rakho jinka chance milkar p (jaise 95%) ho jaaye</td></tr>
+      <tr><td>Repetition penalty</td><td>Jo shabd aa chuke, unka chance thoda ghatao</td></tr>
+    </tbody>
+  </table>
+  <div class="cols2">
+    <div class="box simple"><span class="k">KV cache: dobara mat padho</span><p>Har naye shabd ke liye poori kahani shuru se padhna bekaar hai. Purane shabdon ke keys aur values (seedhi 5) yaad rakh lo, sirf naye shabd ka hisaab karo. Jawab bilkul wahi, kaam kam.</p></div>
+    <figure><div class="fig-t">Is machine pe speed ({{KV_N}} tokens)</div>{{KV_BARS}}<figcaption>Lagbhag {{KV_X}} guna tez. Har baar thoda hilta hai.</figcaption></figure>
+  </div>
+  <h3>Hamare model ne sach mein ye likha</h3>
+  <p class="sample"><b>एक दिन राजू ने अपनी माँ से कहा</b> कि वह जंगल में घूमने जाएगा। सभी जानवर बहुत उत्साहित थे।</p>
+  <p class="sample"><b>kya chal raha hai bhai?</b> → kuchh nahin yaar, bas aaram karna hai.</p>
+  <div class="box warn"><span class="k">Sach baat: model jhooth kyun bolta hai</span><p>Dekho: Raju akela jaane ki baat karta hai, phir achanak "sabhi jaanwar utsaahit" ho jaate hain. Model ko sach nahi pata; use sirf ye pata hai ki kaunsa shabd <b>achha lagta hai</b> agla. Bade models mein isi ko <b>hallucination</b> kehte hain.</p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"At inference I sample from the next-token distribution. Temperature sharpens or flattens it, top-k and top-p cut off the unlikely tail. A KV cache stores the keys and values of earlier tokens so each step only processes the new token; I tested that it gives identical logits to a full pass."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Bank ka chatbot bana rahe ho. Temperature kam rakhoge ya zyada? <i>Kam. Wahan sahi aur ek jaisa jawab chahiye, creativity nahi.</i></p>
+    <p><b>2.</b> KV cache se jawab badalta hai kya? <i>Nahi. Sirf speed badhti hai.</i></p>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">9</div><div><h2>Kaam ka banana: fine-tuning aur chhota karna</h2><div class="file">seedhi 9 · LoRA, quantization</div></div></div>
+  <div class="story"><span class="k">Kahani</span><p>Ek doctor ne 5 saal padhai ki (ye pre-training hai). Ab use dil ka doctor banna hai. Wo sab kuch dobara nahi padhta; bas 1 saal ki khaas training leta hai (ye fine-tuning hai). Purana gyaan wahi rehta hai, upar thoda naya judta hai.</p></div>
+  <h3>LoRA: kitaab mat badlo, haashiye mein notes chipkao</h3>
+  <figure>{{LORA}}<figcaption>W (purana gyaan) ko haath nahi lagate. Uske saath do patli matrix A aur B jodte hain aur sirf unhe train karte hain. Ek 384 × 384 matrix mein 1,47,456 numbers hain; A aur B mein milkar sirf {{LORA_SAVE}}.</figcaption></figure>
+  <table>
+    <thead><tr><th></th><th>Fine-tune se pehle</th><th>Baad mein</th></tr></thead>
+    <tbody>
+      <tr><td>"tera naam kya hai?"</td><td>mera toh bas normal hi hai.</td><td><b>mera naam Chhotu GPT hai.</b></td></tr>
+      <tr><td>Kitne knobs train hue</td><td class="no">—</td><td>1,10,592 (poore model ka <b>0.91%</b>)</td></tr>
+      <tr><td>File ka size</td><td>48.8 MB (poora model)</td><td><b>0.45 MB</b> (sirf naye notes)</td></tr>
+    </tbody>
+  </table>
+  <div class="box warn"><span class="k">Sach baat</span><p>Sirf 20 sawaal-jawab pe sikhaya, to model ne samjha nahi, ratta maara. "kya chal raha hai bhai?" poochne pe bola "kuchh nahi yaar, bas phone pe scratch se banaya gaya". Aur naya seekhte hue thoda purana bhool bhi gaya: ise <b>catastrophic forgetting</b> kehte hain.</p></div>
+  <h3>Quantization: 3.14159 ko 3.1 likhna</h3>
+  <p>Har knob 4 bytes leta hai. 1.2 crore knobs = 48.8 MB. Phone ke liye ye bhaari hai. To har knob ko chhote poore number (−127 se 127) mein badal dete hain, jo sirf 1 byte leta hai.</p>
+  <h3>Haath se hisaab: 4 weights ko int8 banana</h3>
+  <p>Sabse bada weight 0.52 hai. To <code>scale = 0.52 ÷ 127 = {{QUANT_SCALE}}</code>. Har weight ko scale se bhaag do aur gol kar do.</p>
+  {{QUANT_TABLE}}
+  <p>Galti dekho: hazaarwen hisse mein. Isiliye model ko fark nahi padta.</p>
+  <div class="cols2">
+    <figure><div class="fig-t">Size</div>{{SIZE}}</figure>
+    <div class="box good"><span class="k">Asli nateeja</span><p>int8 tak (4 guna chhota) loss mein <b>koi fark nahi</b>. 4-bit pe thoda girta hai. 2-bit pe model poori tarah toot jaata hai. Yaani chhota karne ki bhi ek hadd hai.</p></div>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"For fine-tuning I used LoRA: freeze the base weights and train a small low-rank update, under one percent of the parameters. For deployment I quantized the weights to int8, which made the model four times smaller with no measurable loss; at 2 bits it collapsed."</p></div>
+  <div class="quiz"><span class="k">Khud se poocho</span>
+    <p><b>1.</b> Table mein −0.44 ka int8 khud nikalo. <i>−0.44 ÷ {{QUANT_SCALE}} = −107.46, gol karke −107 (table se milao).</i></p>
+    <p><b>2.</b> LoRA mein purane weights badalte hain kya? <i>Nahi, wo jame rehte hain. Sirf A aur B train hote hain.</i></p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">10</div><div><h2>Interview ke liye tayyar</h2><div class="file">seedhi 10 · kahani, sawaal, galtiyan, 7 din ka plan</div></div></div>
+  <p class="lead">Interview gyaan ka imtihaan kam, <b>samjhane ka imtihaan</b> zyada hai. Jo cheez tum 5 saal ke bachche ko samjha sakte ho, wo tumhe sach mein aati hai. Isliye har sawaal ke do jawab hain.</p>
+  <h3>Apne project ki 2 minute ki kahani</h3>
+  <div class="box say script"><span class="k">Ye yaad nahi karna, is dhaanche pe apne shabdon mein bolna</span>
+    <p><b>Kyun banaya:</b> "I was using LLMs through APIs and realized I didn't understand what happens inside. So I built one from scratch."</p>
+    <p><b>Kya banaya:</b> "A 12 million parameter decoder-only transformer in PyTorch that writes Hindi, Marathi and Hinglish. I wrote every part myself: the BPE tokenizer, attention, the training loop, sampling."</p>
+    <p><b>Kaise:</b> "It has 6 blocks with multi-head causal attention, RoPE for position, RMSNorm and SwiGLU. I trained it on about 11 million tokens of short stories and chat with AdamW, warmup and cosine decay."</p>
+    <p><b>Nateeja:</b> "Loss went from 8.37, which is what a random model should give, down to 1.88 on held-out text. Then I added a KV cache, LoRA fine-tuning with under 1% of the weights, and int8 quantization with no loss."</p>
+    <p><b>Kya seekha, kya kami hai:</b> "It writes grammatical text but not facts; it's a learning model. The biggest lesson was to test the properties, like causality and cache correctness, instead of trusting that the loss goes down."</p>
+  </div>
+  <h3>25 sawaal: pehle simple jawab, phir interview wala</h3>
+
+  <div class="qa"><div class="q">1. LLM kya hai?</div><p class="hi">Ek machine jo "agla shabd batao" khel bahut achha khelti hai.</p><div class="en">A neural network trained to predict the next token. Generating text is predicting, sampling and repeating.</div></div>
+  <div class="qa"><div class="q">2. Parameter kya hota hai?</div><p class="hi">Machine ka ek knob. Seekhne mein yahi ghoomte hain.</p><div class="en">A learnable number in the model. Mine has 12.2 million of them.</div></div>
+  <div class="qa"><div class="q">3. Model seekhta kaise hai?</div><p class="hi">Jawab deta hai, galti naapta hai, har knob ko thoda sahi taraf ghumata hai. Baar-baar.</p><div class="en">Forward pass, compute the loss, backpropagate to get gradients, and update the parameters with gradient descent.</div></div>
+  <div class="qa"><div class="q">4. Backpropagation kya hai?</div><p class="hi">Galti ko aakhir se peeche ki taraf baantna, taaki har knob ko pata chale uska kitna haath tha.</p><div class="en">The chain rule applied backwards through the computation graph to get the gradient of the loss for every parameter.</div></div>
+  <div class="qa"><div class="q">5. Learning rate kya hai? Galat ho to?</div><p class="hi">Kadam ka size. Bada ho to ghaati ke paar kood jaate ho; chhota ho to bahut der lagti hai.</p><div class="en">The step size of each update. Too high and training diverges, too low and it is slow. I saw divergence myself when it was too high.</div></div>
+  <div class="qa"><div class="q">6. Token kya hai?</div><p class="hi">Text ka tukda. Aam shabd poora, mushkil shabd 2-3 tukdon mein.</p><div class="en">A subword unit. It keeps the vocabulary small while still covering any word.</div></div>
+  <div class="qa"><div class="q">7. BPE kaise kaam karta hai?</div><p class="hi">Jo do tukde sabse zyada saath aate hain, unhe jod do. Phir dobara.</p><div class="en">Start from bytes and repeatedly merge the most frequent adjacent pair until the vocabulary reaches the target size.</div></div>
+  <div class="qa"><div class="q">8. Embedding kya hai?</div><p class="hi">Har token ka "pata": 384 numbers. Milte-julte shabdon ke pate paas hote hain.</p><div class="en">A learned vector for each token. Similar tokens end up with similar vectors.</div></div>
+  <div class="qa"><div class="q">9. Attention kya hai?</div><p class="hi">Har shabd peeche mudkar dekhta hai ki kaunsa shabd uske kaam ka hai, aur uski jaankari le leta hai.</p><div class="en">Each token computes a weighted sum over other tokens' values, with weights from the dot product of its query and their keys, passed through softmax.</div></div>
+  <div class="qa"><div class="q">10. Query, key, value kya hain?</div><p class="hi">Query = mera sawaal. Key = tumhari parchi. Value = tumhari jaankari.</p><div class="en">Three projections of each token. Query and key decide how much attention flows; the value is what gets passed along.</div></div>
+  <div class="qa"><div class="q">11. √d se bhaag kyun?</div><p class="hi">Warna numbers bahut bade ho jaate hain aur softmax ek hi shabd ko sab de deta hai.</p><div class="en">Dot products grow with dimension and saturate the softmax, which kills gradients. Scaling keeps them in a healthy range.</div></div>
+  <div class="qa"><div class="q">12. Causal mask kyun?</div><p class="hi">Taaki model agla shabd dekh kar nakal na kare.</p><div class="en">It prevents a position from attending to future tokens, so we can train on all positions at once without leaking the answer.</div></div>
+  <div class="qa"><div class="q">13. Model ko order kaise pata chalta hai?</div><p class="hi">Har shabd ke vector ko uski jagah ke hisaab se ghuma dete hain.</p><div class="en">I use RoPE, which rotates queries and keys by an angle that depends on position, so attention scores depend on relative distance.</div></div>
+  <div class="qa"><div class="q">14. Residual connection kyun?</div><p class="hi">Har teacher copy mein note jodta hai, mitata nahi. Isse purani baat bachi rehti hai.</p><div class="en">It gives gradients a direct path, which is what lets deep networks train. Each block only learns a correction.</div></div>
+  <div class="qa"><div class="q">15. Feed-forward layer kya karti hai?</div><p class="hi">Doosron ko dekhne ke baad har shabd akele sochta hai.</p><div class="en">It transforms each token independently after attention has mixed information. Most of the parameters are there.</div></div>
+  <div class="qa"><div class="q">16. Loss function kya hai?</div><p class="hi">Sahi shabd ko model ne kitna chance diya, uska −ln. Kam chance = badi galti.</p><div class="en">Cross-entropy: the negative log probability assigned to the correct next token.</div></div>
+  <div class="qa"><div class="q">17. Overfitting kya hai? Kaise pakdoge?</div><p class="hi">Ratta maarna. Purane paper pe pass, naye pe fail.</p><div class="en">When the model memorizes training data. I detect it by comparing training loss with validation loss on held-out data.</div></div>
+  <div class="qa"><div class="q">18. Training shuru hote hi kya check karte ho?</div><p class="hi">Pehla loss ln(vocabulary) ke paas hona chahiye. Hamara 8.37 aaya, hona tha 8.32.</p><div class="en">That the initial loss is about the log of the vocabulary size. If not, something is wrong in the model or the data.</div></div>
+  <div class="qa"><div class="q">19. Temperature kya karta hai?</div><p class="hi">Thaile ko hilata hai. Kam = safe, zyada = creative par galat bhi.</p><div class="en">It divides the logits before softmax. Low temperature makes the distribution sharper, high makes it flatter.</div></div>
+  <div class="qa"><div class="q">20. KV cache kya hai?</div><p class="hi">Purane shabdon ka hisaab yaad rakhna, taaki har baar shuru se na padhna pade.</p><div class="en">Caching the keys and values of previous tokens so each generation step only processes the new token.</div></div>
+  <div class="qa"><div class="q">21. Model galat baat kyun bolta hai?</div><p class="hi">Use sach nahi pata. Use bas pata hai kaunsa shabd achha lagta hai agla.</p><div class="en">It is trained for likely text, not true text, and has no mechanism to verify facts.</div></div>
+  <div class="qa"><div class="q">22. Fine-tuning aur LoRA?</div><p class="hi">Poori kitaab dobara nahi likhte, haashiye mein chhote notes chipkate hain.</p><div class="en">Fine-tuning adapts a pretrained model. LoRA does it by freezing the weights and training a small low-rank update.</div></div>
+  <div class="qa"><div class="q">23. Quantization?</div><p class="hi">Har number ko chhota karke likhna, jaise 3.14159 ko 3.1. Jagah bachti hai.</p><div class="en">Storing weights in fewer bits. int8 made my model four times smaller with no loss in validation.</div></div>
+  <div class="qa"><div class="q">24. Kaise pata tumhara code sahi hai?</div><p class="hi">Maine un cheezon ke test likhe jo hamesha sach honi chahiye.</p><div class="en">I test invariants: changing a future token must not change earlier outputs, and the KV cache must match a full forward pass.</div></div>
+  <div class="qa"><div class="q">25. Ye production mein chalega?</div><p class="hi">Nahi. Ye seekhne ka model hai. Sach bolna hi sahi jawab hai.</p><div class="en">No. It is small and trained on little data. Its purpose was understanding; for real use I would fine-tune an existing model.</div></div>
+</section>
+
+<section class="page">
+  <h3 style="margin-top:0">Ye galtiyan mat karna</h3>
+  <table class="words">
+    <thead><tr><th>Mat bolo</th><th>Kyun</th><th>Ye bolo</th></tr></thead>
+    <tbody>
+      <tr><td>"Model samajhta hai"</td><td>Interviewer turant poochega "samajhna kya hai?"</td><td>"Model agle token ki probability predict karta hai"</td></tr>
+      <tr><td>"Maine ChatGPT jaisa banaya"</td><td>Jhooth pakda jaayega</td><td>"Wahi architecture, bahut chhote scale pe"</td></tr>
+      <tr><td>"Attention dikhata hai model kya soch raha hai"</td><td>Attention weight kaaran nahi hota</td><td>"Ye dikhata hai model ne kahan dekha, ye pehla ishaara hai"</td></tr>
+      <tr><td>Ratta hua jawab, tez-tez</td><td>Agla sawaal aate hi atak jaoge</td><td>Kahani se shuru karo, phir asli naam</td></tr>
+      <tr><td>Na aaye to kuch bhi bol dena</td><td>Sabse buri galti</td><td>"I haven't worked with that. My understanding is… but I'd verify."</td></tr>
+    </tbody>
+  </table>
+  <h3>Kaagaz pe ye 3 tasveerein banana seekho</h3>
+  <p>Interview mein aksar whiteboard milta hai. In teen ko bina dekhe banane ki practice karo: (1) seedhi 4 ka flow (text → tokens → blocks → logits → sample), (2) seedhi 6 ka block (do "+" ke saath), (3) seedhi 5 ka attention (Q, K, V → softmax → jod).</p>
+  <h3>Numbers jo zubaan pe hone chahiye</h3>
+  <div class="tiles">
+    <div class="tile"><b>12.2 M</b><span>parameters</span></div>
+    <div class="tile"><b>6 / 6 / 384</b><span>blocks / heads / vector</span></div>
+    <div class="tile"><b>4,096</b><span>vocabulary</span></div>
+    <div class="tile"><b>256</b><span>context (ek baar mein tokens)</span></div>
+    <div class="tile"><b>1.88</b><span>val loss (shuru: 8.37)</span></div>
+    <div class="tile"><b>0.91%</b><span>LoRA mein train hue</span></div>
+    <div class="tile"><b>12 MB</b><span>int8 mein (pehle 49 MB)</span></div>
+    <div class="tile"><b>~3x</b><span>KV cache se tez</span></div>
+  </div>
+  <h3>7 din ka plan</h3>
+  <table>
+    <thead><tr><th>Din</th><th style="width:28mm">Padhna</th><th>Karna (ye zaroori hai)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Seedhi 0, 1, 2</td><td>Gradient descent wali table khud kaagaz pe banao. <code>python autograd.py</code> chalao</td></tr>
+      <tr><td>2</td><td>Seedhi 3, 4</td><td>Apne naam ko <code>tokenizer.py</code> se todo. Softmax ek baar haath se</td></tr>
+      <tr><td>3</td><td>Seedhi 5</td><td>Attention wali table haath se dobara banao. Bina dekhe tasveer banao</td></tr>
+      <tr><td>4</td><td>Seedhi 6, 7</td><td><code>model.py</code> upar se neeche padho. <code>python check.py</code> chalao</td></tr>
+      <tr><td>5</td><td>Seedhi 8, 9</td><td><code>generate.py</code> alag temperature pe chalao aur fark dekho</td></tr>
+      <tr><td>6</td><td>Seedhi 10</td><td>2 minute ki kahani 5 baar zor se bolo. Phone pe record karke suno</td></tr>
+      <tr><td>7</td><td>25 sawaal</td><td>Kisi dost ko samjhao jise AI nahi aata. Jahan atko, wo seedhi dobara</td></tr>
+    </tbody>
+  </table>
+  <div class="box good"><span class="k">Aakhri baat</span><p>Is guide ko padh lena tumhe interview-ready nahi banata. <b>Hisaab khud karna, code chalana aur kisi ko zor se samjhana</b> banata hai. Iske baad doosri PDF (<code>Chhotu-GPT-Andar-Se.pdf</code>) padho: usme saare {{N_TERMS}} terms aur gehre sawaal hain.</p></div>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chhotu GPT, andar se</title>
+<style>
+:root {
+  --ink: #0b0b0b; --sec: #52514e; --muted: #898781; --line: #e1e0d9; --page: #ffffff; --wash: #f7f7f4;
+  --blue: #2a78d6; --blue-d: #184f95; --blue-l: #e6f0fc; --orange: #eb6834; --orange-l: #fdeee7;
+  --aqua: #1baf7a; --aqua-l: #e3f6ee; --navy: #0c1a2e;
+}
+@page { size: A4; margin: 15mm 14mm 16mm; @bottom-right { content: counter(page); font: 9pt -apple-system, sans-serif; color: #898781; } }
+@page :first { margin: 0; @bottom-right { content: none; } }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 10.4pt/1.55 -apple-system, "SF Pro Text", "Helvetica Neue", "Kohinoor Devanagari", sans-serif; }
+main { max-width: 182mm; margin: 0 auto; }
+@media screen { main { padding: 24px 16px; } .cover { border-radius: 0; } }
+h1, h2, h3 { font-family: "Avenir Next", -apple-system, "Kohinoor Devanagari", sans-serif; line-height: 1.2; text-wrap: balance; }
+h2 { font-size: 19pt; margin: 0 0 2mm; letter-spacing: -0.01em; }
+h3 { font-size: 12.5pt; margin: 6mm 0 2mm; break-after: avoid; }
+p { margin: 0 0 3mm; }
+code, .mono { font-family: "SF Mono", Menlo, monospace; font-size: 0.9em; }
+code { background: var(--wash); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+ul { margin: 0 0 3mm; padding-left: 5mm; } li { margin-bottom: 1mm; }
+section.page { break-before: page; }
+section.flow { margin-top: 9mm; }
+section.flow > h3:first-child, section.flow > figure:first-child { margin-top: 0; }
+.chap { break-after: avoid; break-inside: avoid; } .lead { break-before: avoid; break-inside: avoid; }
+.sample, .tiles, .qa { break-inside: avoid; }
+figure { margin: 4mm 0; break-inside: avoid; background: #fcfcfb; border: 1px solid var(--line); border-radius: 10px; padding: 4mm 4mm 3mm; }
+figcaption { font-size: 9pt; color: var(--sec); margin-top: 2mm; }
+figcaption b { color: var(--ink); }
+.fig-t { font: 600 10.5pt "Avenir Next", -apple-system, sans-serif; margin-bottom: 2.5mm; }
+
+/* cover */
+.cover { height: 297mm; background: linear-gradient(155deg, #0c1a2e 0%, #123058 58%, #1c5cab 100%); color: #fff; padding: 26mm 20mm 18mm; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.cover::after { content: ""; position: absolute; right: -60mm; top: -40mm; width: 190mm; height: 190mm; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 0 0 22mm rgba(255,255,255,.035), 0 0 0 46mm rgba(255,255,255,.025); }
+.cover .tag { font: 600 9.5pt "Avenir Next", sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #9ec5f4; }
+.cover h1 { font-size: 46pt; margin: 8mm 0 4mm; letter-spacing: -0.02em; }
+.cover h1 span { color: #9ec5f4; }
+.cover .sub { font-size: 14pt; line-height: 1.45; color: #dbe7f7; max-width: 135mm; }
+.cover .tiles { margin-top: auto; grid-template-columns: repeat(3, 1fr); }
+.cover .tile { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); }
+.cover .tile b { color: #fff; } .cover .tile span { color: #c5d8f1; }
+.cover .foot { margin-top: 9mm; font-size: 9.5pt; color: #b7d3f6; display: flex; justify-content: space-between; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
+.tile { border: 1px solid var(--line); border-radius: 10px; padding: 3.5mm 4mm; background: #fcfcfb; break-inside: avoid; }
+.tile b { display: block; font: 600 19pt "Avenir Next", sans-serif; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tile span { font-size: 8.8pt; color: var(--sec); }
+
+/* chapter head */
+.chap { display: flex; gap: 4mm; align-items: center; margin-bottom: 4mm; padding-bottom: 3.5mm; border-bottom: 2px solid var(--ink); }
+.chap .n { flex: none; width: 15mm; height: 15mm; border-radius: 4mm; background: var(--navy); color: #fff; display: grid; place-items: center; font: 600 17pt "Avenir Next", sans-serif; }
+.chap .file { font-size: 9pt; color: var(--sec); } .chap .file code { background: none; border: 0; padding: 0; color: var(--blue-d); font-weight: 600; }
+.lead { font-size: 11.6pt; line-height: 1.5; color: #23221f; margin-bottom: 4mm; }
+
+/* callouts */
+.box { border-radius: 10px; padding: 3.5mm 4.5mm; margin: 3.5mm 0; break-inside: avoid; }
+.box .k { font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 1mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.simple { background: var(--blue-l); } .simple .k { color: var(--blue-d); }
+.say { background: var(--navy); color: #eef4fc; } .say .k { color: #9ec5f4; } .say p { font-size: 10.6pt; }
+.warn { background: var(--orange-l); } .warn .k { color: #a8431b; }
+.codebox { background: var(--wash); border: 1px solid var(--line); } .codebox .k { color: var(--sec); }
+.good { background: var(--aqua-l); } .good .k { color: #0b6e4b; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; } .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+.cols2 > figure, .cols2 > .box { margin: 0; }
+
+/* bars */
+.hbars { display: grid; gap: 1.6mm; }
+.hb { display: grid; grid-template-columns: 44mm 1fr 30mm; align-items: center; gap: 2.5mm; font-size: 9.2pt; }
+.cols3 .hb { grid-template-columns: 15mm 1fr 10mm; } .cols2 .hb { grid-template-columns: 36mm 1fr 26mm; }
+.hb-l { color: var(--sec); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hb-t { height: 4.2mm; border-left: 1px solid #c3c2b7; }
+.hb-f { height: 100%; border-radius: 0 4px 4px 0; }
+.hb-v { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.legend { display: flex; gap: 5mm; font-size: 8.8pt; color: var(--sec); margin-bottom: 2.5mm; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 3mm; height: 3mm; border-radius: 2px; margin-right: 1.5mm; vertical-align: -0.3mm; }
+.mini-h { font-weight: 600; font-size: 9.6pt; } .mini-s { font-size: 8.6pt; color: var(--sec); margin-bottom: 2mm; }
+
+/* tokens */
+.tokrow { margin-bottom: 3mm; } .tokmeta { display: flex; gap: 3mm; align-items: baseline; font-size: 9pt; margin-bottom: 1mm; } .tokmeta span { color: var(--sec); }
+.chips { display: flex; flex-wrap: wrap; gap: 1mm; }
+.chip { padding: .4mm 1.8mm; border-radius: 4px; font-size: 10pt; border: 1px solid; }
+.chip.c0 { background: #e6f0fc; border-color: #b7d3f6; } .chip.c1 { background: #e3f6ee; border-color: #a9dfc8; }
+.merge { display: grid; grid-template-columns: 26mm 1fr; gap: 1.5mm 3mm; font-size: 9.6pt; align-items: center; }
+.merge .s { color: var(--sec); font-size: 8.8pt; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; font-size: 9.1pt; margin: 3mm 0; }
+th { text-align: left; font: 600 8.2pt "Avenir Next", sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--sec); border-bottom: 1.5px solid var(--ink); padding: 1.5mm 2mm; }
+td { padding: 1.6mm 2mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr { break-inside: avoid; }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+.gl td.num { color: var(--muted); font-variant-numeric: tabular-nums; width: 8mm; }
+.gl td.term { font-weight: 600; width: 37mm; }
+.gl td:last-child { width: 45mm; }
+.gl-h { margin-top: 5mm; }
+.where { font: 8.2pt "SF Mono", Menlo, monospace; color: var(--sec); word-break: break-word; } .where b { color: var(--blue-d); }
+.theory { font-size: 8pt; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 1.5mm; }
+.yes { color: #0b6e4b; font-weight: 600; } .no { color: var(--muted); }
+
+/* interview */
+.qa { break-inside: avoid; border-left: 3px solid var(--blue); padding: .5mm 0 .5mm 4mm; margin: 0 0 4mm; }
+.qa .q { font-weight: 600; font-size: 10.6pt; margin-bottom: 1mm; }
+.qa .en { font-size: 9.6pt; color: #1c2b40; background: var(--blue-l); border-radius: 6px; padding: 1.5mm 2.5mm; margin-bottom: 1mm; }
+.qa .en::before { content: "BOLO  "; font: 600 7.4pt "Avenir Next", sans-serif; letter-spacing: .1em; color: var(--blue-d); }
+.qa .hi { font-size: 9.6pt; color: var(--sec); margin: 0; }
+.toc { columns: 3; column-gap: 6mm; font-size: 9.4pt; padding: 0; list-style: none; }
+.toc li { display: flex; gap: 2.5mm; padding: 1.3mm 0; border-bottom: 1px solid var(--line); break-inside: avoid; }
+.toc b { color: var(--blue-d); width: 6mm; flex: none; }
+.sample { font-size: 10.2pt; border-left: 3px solid var(--aqua); padding-left: 3.5mm; margin: 0 0 2.5mm; } .sample b { color: var(--blue-d); }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tag">LLM from scratch · study guide</div>
+  <h1>Chhotu GPT,<br><span>andar se.</span></h1>
+  <div class="sub">Ek language model jo Hindi, Marathi aur Hinglish likhta hai. Tokenizer se quantization tak har hissa haath se bana. Ye guide batati hai wo kaise bana, har concept kya hai, code mein kahan hai, aur interview mein kaise samjhana hai.</div>
+  <div class="tiles">
+    <div class="tile"><b>12.2 M</b><span>parameters, 6 transformer blocks</span></div>
+    <div class="tile"><b>8.37 → 1.88</b><span>loss, 4000 iterations mein</span></div>
+    <div class="tile"><b>10.9 M</b><span>training tokens, 3 bhashayein</span></div>
+    <div class="tile"><b>4,096</b><span>tokens ki vocabulary, khud ka BPE</span></div>
+    <div class="tile"><b>12.2 MB</b><span>int8 mein size, loss mein fark 0</span></div>
+    <div class="tile"><b>{{N_TERMS}}</b><span>concepts, {{N_CODED}} code ki line ke saath</span></div>
+  </div>
+  <div class="foot"><span>own-voice-models / scratch / llm</span><span>Saare numbers isi project ke run se naape gaye hain · Apple M1 Pro</span></div>
+</div>
+
+<main>
+
+<section class="page">
+  <h2>Is guide ko kaise padhna hai</h2>
+  <p class="lead">Pehle 2 page poori kahani dete hain. Phir 9 chapter, har ek ek file ke baare mein. Aakhir mein saare {{N_TERMS}} concepts ki list aur interview ke sawaal-jawab.</p>
+  <ul class="toc">
+    <li><b>0</b>Poora project ek nazar mein</li>
+    <li><b>1</b>Autograd: network seekhta kaise hai</li>
+    <li><b>2</b>Tokenizer: text se numbers</li>
+    <li><b>3</b>Data: kya padhaya</li>
+    <li><b>4</b>Model: transformer ke andar</li>
+    <li><b>5</b>Training: random se bhasha tak</li>
+    <li><b>6</b>Generation: numbers se text</li>
+    <li><b>7</b>LoRA: sasta fine-tune</li>
+    <li><b>8</b>Quantization: phone ka size</li>
+    <li><b>9</b>X-ray: andar jhaankna</li>
+    <li><b>10</b>Famous repos ke saamne hum</li>
+    <li><b>11</b>Saare {{N_TERMS}} concepts</li>
+    <li><b>12</b>Interview: sawaal aur jawab</li>
+    <li><b>13</b>Ek page ki cheat sheet</li>
+  </ul>
+  <div class="cols2" style="margin-top:5mm">
+    <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Sabse simple shabdon mein. Jaldi mein ho to sirf ye padho.</p></div>
+    <div class="box say"><span class="k">Interview mein bolo</span><p>Wo line jo interview mein seedhe English mein boli ja sakti hai.</p></div>
+    <div class="box codebox"><span class="k">Code mein kahan</span><p>File aur wo naam jahan ye cheez bani hai. Kholo, search karo.</p></div>
+    <div class="box warn"><span class="k">Sach baat</span><p>Jahan model kamzor hai ya result pakka nahi. Ye bolna tumhe mazboot dikhata hai.</p></div>
+  </div>
+  <h3>Ye project kya hai, 4 line mein</h3>
+  <ul>
+    <li>Ek <b>decoder-only transformer</b> (GPT jaisa), PyTorch mein, har layer khud likhi.</li>
+    <li>Kaam ek hi: <b>agla token predict karna</b>. Baaki sab isi se nikalta hai.</li>
+    <li>Hindi aur Marathi ki chhoti kahaniyon aur Hinglish chat pe train hua.</li>
+    <li>Ye Gemma ya ChatGPT ki jagah nahi lega. Ye <b>seekhne ka model</b> hai: wahi architecture, chhota size.</li>
+  </ul>
+  <h3>9 files, 9 lessons</h3>
+  <table>
+    <thead><tr><th>#</th><th>File</th><th>Ek line mein</th><th>Sabse zaroori concept</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>autograd.py</code></td><td>Network seekhta kaise hai</td><td>Backpropagation</td></tr>
+      <tr><td>2</td><td><code>tokenizer.py</code></td><td>Text ko numbers banana</td><td>Byte-pair encoding</td></tr>
+      <tr><td>3</td><td><code>data.py</code></td><td>Training ka text tayyar karna</td><td>Train / val split</td></tr>
+      <tr><td>4</td><td><code>model.py</code></td><td>Transformer</td><td>Self-attention</td></tr>
+      <tr><td>5</td><td><code>train.py</code></td><td>Training loop</td><td>Cross-entropy loss, AdamW</td></tr>
+      <tr><td>6</td><td><code>generate.py</code></td><td>Text banana</td><td>Sampling, KV cache</td></tr>
+      <tr><td>7</td><td><code>lora.py</code></td><td>Fine-tuning</td><td>Low-rank adaptation</td></tr>
+      <tr><td>8</td><td><code>shrink.py</code></td><td>Model chhota karna</td><td>Quantization</td></tr>
+      <tr><td>9</td><td><code>xray.py</code></td><td>Andar dekhna</td><td>Attention maps</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">0</div><div><h2>Poora project ek nazar mein</h2><div class="file">ek token ka safar, shuru se aakhir tak</div></div></div>
+  <p class="lead">LLM jaadu nahi hai. Wo ek function hai: <b>ab tak ke tokens andar, agle token ki probability bahar.</b> Text banta hai kyunki hum ye function baar-baar chalate hain.</p>
+  <figure><div class="fig-t">Text se agle token tak</div>{{FLOW}}<figcaption><b>Padhne ka tareeka:</b> baayein se daayein. Neeche wala teer loop hai: naya token input mein judta hai aur sab dobara chalta hai.</figcaption></figure>
+  <h3>Model sach mein kya "sochta" hai</h3>
+  <p>Ye do chart hamare train hue model ke asli output hain. Har bar ek possible agla token hai, lambai uski probability.</p>
+  <div class="cols2">
+    <figure><div class="fig-t">"एक दिन राजू ने अपनी माँ से कहा" ke baad</div>{{NEXT_HI}}<figcaption>Model lagbhag pakka hai: Hindi mein "कहा" ke baad "कि" hi aata hai. Usne grammar seekh li.</figcaption></figure>
+    <figure><div class="fig-t">"aaj office mein" ke baad</div>{{NEXT_HING}}<figcaption>Yahan kai jawab sahi ho sakte hain, to bharosa bata hua hai. Ise <b>entropy</b> zyada hona kehte hain.</figcaption></figure>
+  </div>
+  <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Model ek shabd nahi "jaanta". Wo har baar 4,096 tokens ko number deta hai, aur hum unme se ek chunte hain. Jab wo pakka hota hai to ek bar lamba hota hai; jab nahi hota to kai chhote.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">1</div><div><h2>Autograd: network seekhta kaise hai</h2><div class="file"><code>autograd.py</code> · pure Python, koi library nahi</div></div></div>
+  <p class="lead">Poori deep learning ek hi loop hai: andaza lagao, dekho kitna galat tha, har weight ko thoda sahi disha mein khiskao. Ye chapter wo loop sabse chhote roop mein banata hai.</p>
+  <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Socho tum andhere mein pahaad se neeche utar rahe ho. Tum pair se zameen ka dhalaan mehsoos karte ho aur neeche ki taraf ek kadam lete ho. <b>Dhalaan = gradient. Kadam ka size = learning rate. Oonchai = loss.</b> Bas yahi training hai.</p></div>
+  <figure><div class="fig-t">Computation graph: number kaise bane, uska record</div>{{GRAPH}}<figcaption><b>Forward:</b> a aur b se loss tak hisaab. <b>Backward:</b> loss se peeche, har number se poochho "tumhe badalne se loss kitna badlega". Yahi backpropagation hai, aur ye sirf chain rule hai.</figcaption></figure>
+  <h3>Chaar step jo kabhi nahi badalte</h3>
+  <table>
+    <thead><tr><th>Step</th><th>Kya hota hai</th><th>Code mein</th></tr></thead>
+    <tbody>
+      <tr><td><b>Forward pass</b></td><td>Input ko network se guzaar kar prediction nikalna</td><td><code>net(x)</code></td></tr>
+      <tr><td><b>Loss</b></td><td>Ek number: prediction kitni galat hai</td><td><code>(net(x) - y) ** 2</code></td></tr>
+      <tr><td><b>Backward pass</b></td><td>Har weight ka gradient nikalna</td><td><code>loss.backward()</code></td></tr>
+      <tr><td><b>Update</b></td><td>Weight ko gradient ke ulte taraf khiskana</td><td><code>p.data -= lr * p.grad</code></td></tr>
+    </tbody>
+  </table>
+  <div class="cols2">
+    <div class="box good"><span class="k">Naapa hua</span><p><b>Gradient check:</b> hamara backprop 0.084245 deta hai, aur "nudge karke dekho" tareeka bhi 0.084245. Dono barabar, yaani engine sahi hai.</p><p><b>XOR:</b> 1000 step mein loss 0.478 se 0.0000. Predictions [0, 1, 1, 0].</p></div>
+    <div class="box warn"><span class="k">Sach baat</span><p>Pehli baar learning rate 0.1 pe loss ghatne ki jagah <b>infinity</b> ho gaya (divergence). 0.05 pe theek chala. Ye sabse aam training bug hai: step itna bada ki ghaati ke paar kood gaye.</p></div>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Backpropagation is just the chain rule applied over a computation graph in reverse topological order. I implemented a scalar autograd engine myself and verified it with a finite-difference gradient check before moving to PyTorch."</p></div>
+  <div class="box codebox"><span class="k">Code mein kahan</span><p><code>class Value</code> ek number + uska gradient. <code>_backward</code> har operation ka local chain rule. <code>def backward</code> poore graph pe ulta chalna. <code>class MLP</code> wahi cheez jo har transformer block ke andar hai.</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">2</div><div><h2>Tokenizer: text se numbers</h2><div class="file"><code>tokenizer.py</code> · byte-pair encoding (BPE), scratch se</div></div></div>
+  <p class="lead">Model akshar nahi padh sakta, sirf numbers. Tokenizer tay karta hai ki "ek tukda" kya hai. Ye faisla model ki quality pe seedha asar daalta hai.</p>
+  <table>
+    <thead><tr><th>Tareeka</th><th>Fayda</th><th>Nuksaan</th></tr></thead>
+    <tbody>
+      <tr><td>Har akshar ek token</td><td>Vocabulary bahut chhoti</td><td>Sequence bahut lambi, seekhna mushkil</td></tr>
+      <tr><td>Har shabd ek token</td><td>Sequence chhoti</td><td>Lakhon shabd, naya shabd aaya to fail</td></tr>
+      <tr><td><b>Subword (BPE)</b></td><td>Beech ka raasta, har LLM yahi leta hai</td><td>Tokenizer ko pehle train karna padta hai</td></tr>
+    </tbody>
+  </table>
+  <figure><div class="fig-t">BPE teen step mein</div>
+    <div class="merge">
+      <div><b>Shuruaat</b></div><div><span class="chip c0">न</span> <span class="chip c1">म</span> <span class="chip c0">स</span> <span class="chip c1">्</span> <span class="chip c0">त</span> <span class="chip c1">े</span> <span class="s">har tukda alag (asal mein bytes; ek Devanagari akshar = 3 bytes)</span></div>
+      <div><b>Merge 1</b></div><div><span class="chip c0">न</span> <span class="chip c1">म</span> <span class="chip c0">स्</span> <span class="chip c1">त</span> <span class="chip c0">े</span> <span class="s">sabse zyada saath aane wala pair "स" + "्" ek ban gaya</span></div>
+      <div><b>Merge 2</b></div><div><span class="chip c0">न</span> <span class="chip c1">म</span> <span class="chip c0">स्</span> <span class="chip c1">ते</span> <span class="s">phir agla sabse aam pair</span></div>
+      <div><b>… 3,835 merges</b></div><div><span class="chip c0">नमस्ते</span> <span class="s">aam shabd poora ek token ban jaata hai</span></div>
+    </div>
+    <figcaption>Ye tasveer samjhane ke liye saral ki gayi hai; asal mein shuruaat bytes se hoti hai. 256 bytes + 3,835 merges + 5 special tokens = <b>4,096</b> ki vocabulary.</figcaption>
+  </figure>
+  <figure><div class="fig-t">Hamara tokenizer asli vaakyon ko aise kaat-ta hai</div>{{TOKCHIPS}}<figcaption>⎵ ka matlab space. Aam shabd ek token ("अपनी", "weekend"). Kam aane wale shabd tukdon mein: "राजू" = "राज" + "ू", aur "bhai" = "b" + "hai". BPE ko shabd ka matlab nahi pata, sirf ginti pata hai.</figcaption></figure>
+  <figure><div class="fig-t">Ek token mein kitne akshar samaate hain (300 documents pe naapa)</div>{{COMPRESS}}<figcaption>Zyada = behtar compression. Hinglish Latin script mein hai (1 byte per akshar), Devanagari 3 bytes leta hai par tokenizer use wapas jod deta hai.</figcaption></figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Byte-level kyun</span><p>256 bytes se shuru karne ka matlab: duniya ka koi bhi text encode ho sakta hai. Emoji, naya shabd, galat spelling, kuch bhi. "Unknown token" kabhi nahi aata.</p></div>
+    <div class="box simple"><span class="k">Special tokens</span><p><code>&lt;|bos|&gt;</code> <code>&lt;|eos|&gt;</code> document ki shuruaat aur ant. <code>&lt;|hi|&gt;</code> <code>&lt;|mr|&gt;</code> <code>&lt;|hing|&gt;</code> bhasha ka tag: isse hum model ko batate hain kis bhasha mein likhna hai.</p></div>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"I wrote a byte-level BPE tokenizer. It starts from 256 bytes so nothing is ever out of vocabulary, then greedily merges the most frequent adjacent pair. I pre-tokenize into words and keep a pair-to-words index, so each merge only touches the words that contain that pair."</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">3</div><div><h2>Data: model ko kya padhaya</h2><div class="file"><code>data.py</code> · teen open datasets, 92 MB download</div></div></div>
+  <p class="lead">Model utna hi achha hota hai jitna uska data. Chhota model poora internet nahi seekh sakta, par chhoti vocabulary wale text se grammar aur seedha logic seekh sakta hai. Yahi <b>TinyStories</b> ka idea hai.</p>
+  <div class="cols2">
+    <figure><div class="fig-t">Documents ki ginti</div>{{DATA_DOCS}}<figcaption>Hinglish ke documents bahut hain kyunki har ek sirf ek sawaal-jawab hai.</figcaption></figure>
+    <figure><div class="fig-t">Kul akshar (million)</div>{{DATA_CHARS}}<figcaption>Akshar ke hisaab se teeno bhashayein lagbhag barabar hain.</figcaption></figure>
+  </div>
+  <h3>Har document ka dhaancha</h3>
+  <figure><div class="chips"><span class="chip c1">&lt;|bos|&gt;</span><span class="chip c1">&lt;|hi|&gt;</span><span class="chip c0">एक बार की बात है, एक छोटे से गाँव में…</span><span class="chip c1">&lt;|eos|&gt;</span></div>
+  <figcaption>Har document bhasha ke tag se shuru hota hai. Isliye generation ke waqt sirf tag badal kar bhasha chuni ja sakti hai. Ise <b>conditional generation</b> kehte hain.</figcaption></figure>
+  <table>
+    <thead><tr><th>Cheez</th><th class="r">Number</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td>Train tokens</td><td class="r">10.87 M</td><td>Jis pe model seekhta hai</td></tr>
+      <tr><td>Val tokens</td><td class="r">0.22 M</td><td>2% documents alag rakhe. Model inhe kabhi nahi dekhta.</td></tr>
+      <tr><td>Epochs</td><td class="r">4.5</td><td>Training mein poora data itni baar dekha gaya</td></tr>
+      <tr><td>File format</td><td class="r">uint16</td><td>Har token 2 bytes; vocabulary 65,536 se chhoti hai</td></tr>
+    </tbody>
+  </table>
+  <div class="box simple"><span class="k">Val split kyun</span><p>Exam mein wahi sawaal aaye jo ratte the to pata nahi chalta ki samjha ya nahi. Val data wo naye sawaal hain. Agar train pe achha aur val pe kharab, to model ne ratta maara: ise <b>overfitting</b> kehte hain.</p></div>
+  <div class="box warn"><span class="k">Sach baat</span><p>Har dataset ka sirf pehla hissa liya hai (Hindi file 5.4 GB ki hai, hamne 48 MB liya). Aur ye kahaniyan GPT-4o-mini ki banayi hui hain, insaanon ki nahi. Isliye model "bachchon ki kahani" ki bhasha seekhta hai, aam Hindi nahi.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">4</div><div><h2>Model: transformer ke andar</h2><div class="file"><code>model.py</code> · 12,194,688 parameters</div></div></div>
+  <p class="lead">Transformer do cheezon ko baar-baar dohraata hai: <b>attention</b> (tokens ek doosre se jaankari lete hain) aur <b>feed-forward</b> (har token akele sochta hai). Dono ke saath ek skip connection.</p>
+  <figure><div class="fig-t">Architecture</div>{{ARCH}}<figcaption><b>Skip connection:</b> block x ko badalta nahi, usme kuch <i>jodta</i> hai. Isi "+" ke raaste gradient seedha neeche tak pahunchta hai, isliye 6 ya 60 layers train ho paati hain.</figcaption></figure>
+  <figure><div class="fig-t">Parameters kahan hain (asli model se gine)</div>{{PARAMS}}<figcaption>Kul {{N_PARAMS}}. Sabse zyada feed-forward mein, jahan model ki "yaaddasht" rehti hai. Embedding aur LM head ek hi matrix hain (<b>weight tying</b>), isliye ek baar gine.</figcaption></figure>
+  <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Socho ek meeting hai. <b>Attention</b> = sab ek doosre ki baat sunte hain aur zaroori cheez note karte hain. <b>Feed-forward</b> = har koi apne notes pe akele sochta hai. Ye do kaam 6 baar hote hain, aur har baar samajh thodi gehri hoti hai.</p></div>
+</section>
+
+<section class="flow">
+  <h3>Attention, tukdon mein</h3>
+  <figure>{{ATTN}}<figcaption><b>Query</b> sawaal hai, <b>Key</b> label hai, <b>Value</b> asli maal hai. Jis token ki key meri query se milti hai, uski value mujhe zyada milti hai.</figcaption></figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">√head_dim se bhaag kyun</span><p>Bade vectors ka dot product bada hota hai. Bade numbers pe softmax ek hi token ko 100% de deta hai aur baaki sab 0. Tab gradient mar jaata hai. Bhaag dene se numbers kaabu mein rehte hain.</p></div>
+    <div class="box simple"><span class="k">Multi-head kyun</span><p>Ek head ek hi rishta pakad sakta hai. 6 heads alag-alag cheezein dekhte hain: kaun subject hai, kaunsa quote khula hai, pichhla shabd kya tha.</p></div>
+  </div>
+  <figure><div class="fig-t">Causal mask: future dekhna mana hai</div>{{MASK}}</figure>
+  <figure><div class="fig-t">RoPE: model ko order kaise pata chalta hai</div>{{ROPE}}<figcaption>Attention ko apne aap order nahi pata: shabd ulat-palat karo to wahi jawab dega. RoPE har vector ko uski position ke angle se ghumata hai, ghadi ki suiyon ki tarah alag-alag speed pe. Do tokens ka score phir sirf unke beech ki <b>doori</b> pe depend karta hai.</figcaption></figure>
+</section>
+
+<section class="flow">
+  <h3>Design ke faisle: purana GPT-2 banam aaj ke LLM</h3>
+  <table>
+    <thead><tr><th>Cheez</th><th>GPT-2 (2019)</th><th>Hamne kya liya</th><th>Kyun</th></tr></thead>
+    <tbody>
+      <tr><td>Position</td><td>Seekhi hui table</td><td><b>RoPE</b></td><td>Relative position, alag table nahi chahiye</td></tr>
+      <tr><td>Normalization</td><td>LayerNorm</td><td><b>RMSNorm</b></td><td>Sasta, utna hi achha</td></tr>
+      <tr><td>Norm kahan</td><td>pre-norm</td><td><b>pre-norm</b></td><td>Skip ka raasta saaf rehta hai</td></tr>
+      <tr><td>Feed-forward</td><td>GELU, 4x</td><td><b>SwiGLU</b></td><td>Llama aur Gemma yahi use karte hain</td></tr>
+      <tr><td>Bias</td><td>haan</td><td><b>nahi</b></td><td>Fark nahi padta, parameters bachte hain</td></tr>
+      <tr><td>Embedding / head</td><td>tied</td><td><b>tied</b></td><td>1.57 M parameters bachte hain</td></tr>
+    </tbody>
+  </table>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"It's a pre-norm decoder-only transformer with the modern Llama-style choices: RoPE instead of learned positions, RMSNorm instead of LayerNorm, SwiGLU instead of GELU, no biases, and tied input and output embeddings. I wrote attention by hand instead of calling scaled_dot_product_attention so I could record and inspect the attention weights."</p></div>
+  <div class="box codebox"><span class="k">Code mein kahan</span><p><code>class CausalSelfAttention</code> poora attention. <code>def apply_rope</code> rotation. <code>class RMSNorm</code>, <code>class FeedForward</code>, <code>class Block</code>. <code>def cross_entropy</code> loss, haath se. <code>class Config</code> saare hyperparameters ek jagah.</p></div>
+  <h3>Hyperparameters</h3>
+  <div class="tiles">
+    <div class="tile"><b>384</b><span>d_model: har token ke vector ki lambai</span></div>
+    <div class="tile"><b>6</b><span>n_layer: blocks</span></div>
+    <div class="tile"><b>6</b><span>n_head: har block mein heads (har ek 64 ka)</span></div>
+    <div class="tile"><b>256</b><span>ctx: ek baar mein kitne tokens</span></div>
+  </div>
+  <div class="box good"><span class="k">Kaise pata code sahi hai</span>
+    <p><code>check.py</code> ye sab test karta hai, aur sab pass hain:</p>
+    <ul>
+      <li><b>Causality:</b> baad ka token badalne se pehle ki predictions nahi badalti. Mask sahi hai.</li>
+      <li><b>Loss:</b> haath se likha cross-entropy PyTorch wale ke barabar hai.</li>
+      <li><b>KV cache:</b> ek-ek token dene pe wahi logits aate hain jo poori sequence dene pe.</li>
+      <li><b>LoRA:</b> naya adapter kuch nahi badalta; merge karne ke baad output wahi rehta hai.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">5</div><div><h2>Training: random se bhasha tak</h2><div class="file"><code>train.py</code> · 4000 iterations, ~50 minute, Mac ke GPU pe</div></div></div>
+  <p class="lead">Training <b>self-supervised</b> hai: kisi ne kuch label nahi kiya. Har position ka sahi jawab text ka agla token hi hai.</p>
+  <figure>{{LOOP}}</figure>
+  <h3>Training ke 6 hisse, aur har ek kyun hai</h3>
+  <table>
+    <thead><tr><th>Hissa</th><th>Kya karta hai</th><th>Na ho to</th></tr></thead>
+    <tbody>
+      <tr><td><b>Cross-entropy loss</b></td><td>Sahi token ko di gayi probability ka −log</td><td>Seekhne ka koi signal nahi</td></tr>
+      <tr><td><b>AdamW</b></td><td>Har weight ka apna step size + momentum</td><td>Sada SGD se transformer bahut dheere seekhta hai</td></tr>
+      <tr><td><b>Weight decay</b></td><td>Weights ko zero ki taraf kheenchta hai</td><td>Ratta maarne ka khatra badhta hai</td></tr>
+      <tr><td><b>Warmup + cosine</b></td><td>Learning rate ka time-table</td><td>Shuru mein training bigad sakti hai</td></tr>
+      <tr><td><b>Gradient clipping</b></td><td>Bahut bade gradient ko 1.0 pe kaat deta hai</td><td>Ek kharab batch model bigaad sakta hai</td></tr>
+      <tr><td><b>Dropout</b></td><td>10% numbers random zero</td><td>Model kuch hi raaston pe tik jaata hai</td></tr>
+    </tbody>
+  </table>
+  <figure><div class="fig-t">Loss curve: model seekh raha hai</div>{{LOSS}}<figcaption><b>Shuruaat 8.37 se hui</b> (chart ke upar, bahar). Neela = har batch ka loss, hilta hai kyunki har batch alag hai. Naarangi = andekhe text pe loss, har 500 iteration pe. Dono saath gir rahe hain aur aakhir mein sirf 0.19 ka fark hai: <b>overfitting nahi hui</b>.</figcaption></figure>
+  <div class="tiles">
+    <div class="tile"><b>8.37</b><span>pehla loss. ln(4096) = 8.32 hona chahiye tha. Sahi.</span></div>
+    <div class="tile"><b>1.69</b><span>aakhri train loss</span></div>
+    <div class="tile"><b>1.88</b><span>aakhri val loss</span></div>
+    <div class="tile"><b>6.5</b><span>perplexity: 4,096 mein se ~6 ke beech confuse</span></div>
+  </div>
+  <div class="box simple"><span class="k">Pehla loss 8.32 kyun hona chahiye</span><p>Bina seekha model har token ko barabar chance deta hai: 1/4096. Uska loss −ln(1/4096) = 8.32. Agar pehla loss isse bahut alag aaye to code mein bug hai. Ye sabse sasta sanity check hai, aur interview mein ye batana bahut achha lagta hai.</p></div>
+</section>
+
+<section class="flow">
+  <figure><div class="fig-t">Learning rate: pehle warmup, phir cosine decay</div>{{LR}}<figcaption>Pehle 200 step mein dheere badhta hai (random network ke shuruaati gradients jangli hote hain), phir cosine curve pe ghat-ta hai taaki model aakhir mein sthir ho.</figcaption></figure>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Teacher forcing</span><p>Training mein model ko hamesha <i>sahi</i> pichhle tokens milte hain, uske apne galat andaze nahi. Aur causal mask ki wajah se 256 tokens ki ek sequence 256 examples ban jaati hai.</p></div>
+    <div class="box simple"><span class="k">Perplexity</span><p>exp(loss). 6.5 ka matlab: har kadam pe model utna unsure hai jitna 6-7 barabar options mein se chunte waqt hota. Random model ka 4,096 hota.</p></div>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"Training is next-token prediction with cross-entropy. I use AdamW with weight decay only on the matrices, linear warmup then cosine decay, and gradient clipping at 1.0. I sanity-checked that the initial loss was ln of the vocab size, and I track validation loss on held-out documents to catch overfitting. It went from 8.37 to 1.88."</p></div>
+  <div class="box warn"><span class="k">Sach baat</span><p>Val loss aakhir tak gir raha tha, yaani training rokne ka waqt nahi aaya tha: hamne bas 4000 pe rok diya. Zyada iterations ya zyada data se model aur behtar hoga.</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">6</div><div><h2>Generation: numbers se text</h2><div class="file"><code>generate.py</code> · sampling aur KV cache</div></div></div>
+  <p class="lead">Model sirf probabilities deta hai. Unme se token <i>kaise</i> chunte hain, isse output ka mizaaj tay hota hai.</p>
+  <figure><div class="fig-t">Temperature ka asar: wahi model, wahi prompt ("aaj office mein")</div>{{TEMP}}<figcaption>Logits ko temperature se bhaag dete hain. Kam temperature pe sabse likely token aur bada ho jaata hai; zyada pe sab barabar hone lagte hain.</figcaption></figure>
+  <table>
+    <thead><tr><th>Tareeka</th><th>Kya karta hai</th><th>Kab</th></tr></thead>
+    <tbody>
+      <tr><td><b>Greedy</b></td><td>Hamesha sabse likely token</td><td>Jab ek hi sahi jawab chahiye. Aksar repeat karta hai.</td></tr>
+      <tr><td><b>Temperature</b></td><td>Distribution ko sharp ya flat karta hai</td><td>0.7 – 0.9 aam taur pe</td></tr>
+      <tr><td><b>Top-k</b></td><td>Sirf k sabse likely tokens rakhta hai</td><td>Bekaar tokens kaatne ke liye</td></tr>
+      <tr><td><b>Top-p (nucleus)</b></td><td>Utne tokens jinka jod p ho</td><td>Jab model pakka ho to kam, na ho to zyada options</td></tr>
+      <tr><td><b>Repetition penalty</b></td><td>Aa chuke tokens ko dabata hai</td><td>Loop rokne ke liye</td></tr>
+    </tbody>
+  </table>
+  <h3>KV cache: wahi jawab, kam kaam</h3>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Bina cache: har naye token ke liye model poori kahani shuru se dobara padhta hai. Cache ke saath: purane tokens ke keys aur values yaad rakhe jaate hain, aur sirf naya token process hota hai. Jawab bilkul same, <code>check.py</code> ye test karta hai.</p></div>
+    <figure><div class="fig-t">Speed, is machine pe ({{KV_N}} tokens, CPU)</div>{{KV_BARS}}<figcaption><b>{{KV_X}}x tez.</b> Sequence jitni lambi, fayda utna zyada.</figcaption></figure>
+  </div>
+  <h3>Model ne asal mein kya likha</h3>
+  <p class="sample"><b>एक दिन राजू ने अपनी माँ से कहा</b> कि वह जंगल में घूमने जाएगा। सभी जानवर बहुत उत्साहित थे। राजू ने सोचा, "क्यों न मैं भी उनके साथ खेलूं?"</p>
+  <p class="sample"><b>एकदा एक लहान मुलगा</b> होता, ज्याचे नाव आर्यन होते. आर्यनला समुद्रकिनाऱ्यावर खेळायला खूप आवडत असे. एक दिवस, तो समुद्राच्या किनाऱ्यावर गेला.</p>
+  <p class="sample"><b>kya chal raha hai bhai?</b> → kuchh nahin yaar, bas aaram karna hai.</p>
+  <p class="sample"><b>weekend ka kya plan hai?</b> → bas ghar pe relax karna hai, aaram karne ke liye.</p>
+  <div class="box warn"><span class="k">Sach baat</span><p>Grammar theek hai, par kahani ka logic toot-ta hai: Raju akela jaane ki baat karta hai, phir achanak "sabhi jaanwar utsaahit" ho jaate hain. Model shabdon ka pattern jaanta hai, duniya nahi. Isi ko bade models mein <b>hallucination</b> kehte hain.</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">7</div><div><h2>LoRA: 1% se kam weights se fine-tune</h2><div class="file"><code>lora.py</code> · 20 sawaal-jawab, 600 steps</div></div></div>
+  <p class="lead"><b>Pre-training</b> bhasha sikhati hai. <b>Fine-tuning</b> us model ko ek kaam, domain ya personality ke liye dhaalti hai. LoRA ye bina original weights chhue karta hai.</p>
+  <figure>{{LORA}}<figcaption><b>B zero se kyun shuru:</b> taaki pehle step pe B·A = 0 ho aur model bilkul pehle jaisa chale. Training dheere-dheere badlaav jodti hai.</figcaption></figure>
+  <table>
+    <thead><tr><th></th><th>Fine-tune se pehle</th><th>Baad mein</th></tr></thead>
+    <tbody>
+      <tr><td>Train hue parameters</td><td class="no">—</td><td><b>110,592</b> of 12.2 M (0.91%)</td></tr>
+      <tr><td>Persona loss</td><td>4.58</td><td><b>0.32</b></td></tr>
+      <tr><td>General val loss</td><td>1.829</td><td>1.888 <span class="no">(+0.06, thoda bhoola)</span></td></tr>
+      <tr><td>"tera naam kya hai?"</td><td>mera toh bas normal hi hai.</td><td><b>mera naam Chhotu GPT hai.</b></td></tr>
+      <tr><td>"tu kaun hai?"</td><td class="no">—</td><td>main ek chhota GPT hun, scratch se banaya gaya.</td></tr>
+      <tr><td>File ka size</td><td>48.8 MB (poora model)</td><td><b>0.45 MB</b> (sirf adapter)</td></tr>
+    </tbody>
+  </table>
+  <div class="cols2">
+    <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>Poori kitaab dobara likhne ki jagah, uske haashiye mein chhote notes chipka do. Kitaab wahi rehti hai, notes use naya kaam sikha dete hain. Notes ki file 100 guna chhoti hai.</p></div>
+    <div class="box simple"><span class="k">Rank kya hai</span><p>A aur B kitne "patle" hain. Rank 8 ka matlab badlaav 8 dishaon tak seemit hai. Maanyata ye hai ki ek naye kaam ke liye zaroori badlaav simple hota hai, chahe model khud complex ho.</p></div>
+  </div>
+  <div class="box warn"><span class="k">Sach baat: teen cheezein jo galat gayi</span>
+    <ul>
+      <li><b>Bhoolna.</b> Pehli koshish mein general val loss 2.70 se 3.19 ho gaya (catastrophic forgetting). Har step mein purane data ka ek batch jodne se (<b>replay</b>) ye kaafi kam hua.</li>
+      <li><b>Kam training.</b> 300 steps pe model ne apna naam "Mhhotu GTP" likha. 600 pe sahi aaya.</li>
+      <li><b>Ratta.</b> Persona aam baat mein ris gaya: "kya chal raha hai bhai?" ka jawab aaya "kuchh nahi yaar, bas phone pe scratch se banaya gaya." 20 examples samajhne ke liye kam hain.</li>
+    </ul>
+  </div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"LoRA freezes the pretrained weights and learns a low-rank update B times A on the attention matrices. B is initialized to zero so training starts from the original model. I trained 0.91% of the parameters, the adapter is 0.45 megabytes, and after training I merge it back so inference cost is unchanged. I also saw catastrophic forgetting and reduced it by replaying original data."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">8</div><div><h2>Quantization: phone ke size tak</h2><div class="file"><code>shrink.py</code> · weights ko kam bits mein rakhna</div></div></div>
+  <p class="lead">Weights 32-bit floats mein train hote hain. Unhe itni baareeki ki zaroorat nahi hoti. Kam bits mein rakhne se model chhota hota hai; sawaal ye hai ki kitna nuksaan hota hai.</p>
+  <div class="cols2">
+    <figure><div class="fig-t">Size</div>{{SIZE}}<figcaption>Parameters × bits ÷ 8. Ye weights ka hisaab hai, file format ka nahi.</figcaption></figure>
+    <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>3.14159 ko 3.1 likhna. Har number thoda galat ho jaata hai par jagah bahut bachti hai. int8 mein har weight −127 se 127 ke beech ka ek poora number ban jaata hai, saath mein ek <b>scale</b> jo use wapas float banata hai.</p></div>
+  </div>
+  <figure><div class="fig-t">Nuksaan: val loss kitna badha (fp32 ke mukable, same batches)</div>{{QUANT}}<figcaption><b>int8 tak muft hai.</b> 4-bit pe fark dikhta hai, aur har row ka apna scale rakhna (per-channel) 4 guna behtar hai. 2-bit pe model poori tarah toot gaya (loss 8.6, random jaisa), isliye wo chart mein nahi hai.</figcaption></figure>
+  <table>
+    <thead><tr><th>Term</th><th>Matlab</th></tr></thead>
+    <tbody>
+      <tr><td><b>PTQ</b> (post-training)</td><td>Train hone ke baad quantize karna. Hamne yahi kiya.</td></tr>
+      <tr><td><b>QAT</b> (quantization-aware)</td><td>Training ke dauran hi quantization ka asar dikhana. Zyada mehnat, kam nuksaan. Gemma ka QAT version yahi hai.</td></tr>
+      <tr><td><b>Per-tensor</b></td><td>Poori matrix ka ek scale. Simple.</td></tr>
+      <tr><td><b>Per-channel</b></td><td>Har row ka apna scale. Chhote weights wali row bade weights wali row ki wajah se nahi pisti.</td></tr>
+    </tbody>
+  </table>
+  <div class="box warn"><span class="k">Sach baat</span><p>Pehli baar chaaron rows mein loss bilkul same aaya (1.8448) aur laga code mein bug hai. Jaanch ki to pata chala int8 ki galti weight ke size ka sirf ~1% hai, isliye loss sach mein nahi hilta. Tab 4, 3 aur 2 bit jode taaki dikhe ki kahan toot-ta hai. <b>Seekh: "kuch nahi badla" ko pehle shak se dekho, phir naap ke maano.</b></p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p>"I did post-training quantization and measured validation loss on identical batches. int8 was free, 12 megabytes instead of 49. At 4 bits per-channel scaling lost 0.03 while per-tensor lost 0.12, and at 2 bits the model collapsed. So the practical floor for this model is around 4 bits with per-channel scales."</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">9</div><div><h2>X-ray: model ke andar jhaankna</h2><div class="file"><code>xray.py</code> · tokens, belief, attention</div></div></div>
+  <p class="lead">Jo model tum dekh sakte ho, wahi tum samjha sakte ho. Ye asli attention map hai, hamare train hue model se, jab wo "एक दिन राजू ने अपनी माँ से कहा" padh raha tha.</p>
+  <figure><div class="fig-t">Layer 3 ka attention (6 heads ka average)</div>{{HEAT}}<figcaption><b>Padhne ka tareeka:</b> har row ek token hai, aur us row ke numbers batate hain wo kis pichhle token ko kitna dekh raha hai. Aakhri token "कहा" sabse zyada in pe dhyaan deta hai: <b>{{HEAT_LAST}}</b>. Upar-daayein ka khaali kona causal mask hai.</figcaption></figure>
+  <div class="box simple"><span class="k">Seedhi bhasha mein</span><p>"कहा" ke baad kya aayega ye tay karne ke liye model "से" aur "ने" ko dekhta hai: yaani wo vaakya ka dhaancha pakad raha hai (kisne, kisse). Kisi ne use grammar nahi sikhayi; ye agla token predict karte-karte khud ubhra.</p></div>
+  <div class="box warn"><span class="k">Sach baat</span><p>Attention map dekhkar kahani banana aasaan hai aur galat bhi ho sakta hai. Ye 6 heads ka average hai, aur attention weight "kaaran" nahi hai, sirf "kahan dekha". Interview mein ise <b>interpretability ka pehla kadam</b> kaho, saboot nahi.</p></div>
+  <div class="box codebox"><span class="k">Chalao</span><p><code>python xray.py --lang hi --prompt "एक दिन राजू ने अपनी माँ से कहा"</code> teen cheezein dikhata hai: tokens, agle token ki probability, aur har layer ka attention.</p></div>
+</section>
+
+<section class="flow">
+  <div class="chap"><div class="n">10</div><div><h2>Famous repos ke saamne hum</h2><div class="file">source code padhkar, 12 Oct 2026 ko</div></div></div>
+  <p class="lead">"LLM from scratch" ke sabse mashhoor repos ka model code padha aur apne se milaya. Interviewer aksar poochta hai "nanoGPT se alag kya kiya".</p>
+  <table>
+    <thead><tr><th>Cheez</th><th>nanoGPT / Raschka</th><th>minimind</th><th>nanochat</th><th>Chhotu GPT</th></tr></thead>
+    <tbody>
+      <tr><td>Kis jaisa</td><td>GPT-2 (2019)</td><td>Llama-style</td><td>2025-26 ke tricks</td><td>Llama-style</td></tr>
+      <tr><td>Position</td><td>seekhi hui table</td><td>RoPE</td><td>RoPE</td><td><b>RoPE</b></td></tr>
+      <tr><td>Norm</td><td>LayerNorm</td><td>RMSNorm</td><td>RMSNorm</td><td><b>RMSNorm</b></td></tr>
+      <tr><td>Feed-forward</td><td>GELU</td><td>SwiGLU</td><td>relu²</td><td><b>SwiGLU</b></td></tr>
+      <tr><td>QK norm</td><td class="no">nahi</td><td class="yes">haan</td><td class="yes">haan</td><td>switch, default off</td></tr>
+      <tr><td>Weight tying</td><td>haan (nanoGPT)</td><td>haan</td><td class="no">nahi</td><td><b>haan</b></td></tr>
+      <tr><td>Optimizer</td><td>AdamW</td><td>AdamW</td><td>Muon + AdamW</td><td>AdamW</td></tr>
+      <tr><td>Khaas</td><td>saaf, padhne layak</td><td>MoE option</td><td>chat stage, eval, UI</td><td>bhasha ke tags, x-ray</td></tr>
+    </tbody>
+  </table>
+  <h3>Ablation: unke do ideas, hamare model pe naape</h3>
+  <p><b>Ablation study</b> = ek cheez badlo, baaki sab same rakho, aur naapo. nanochat ke do ideas liye: <b>QK norm</b> (query aur key ko barabar lambai ka karna) aur <b>zero-init</b> (har block shuru mein "kuch nahi" karta hai).</p>
+  <figure><div class="fig-t">Val loss, 500 iterations ke baad (kam = behtar)</div>{{ABL}}<figcaption>Bars 2.6 se shuru hain taaki chhota fark dikhe; asli number bracket mein hai. Dono ideas madad karte hain aur saath mein fayda jud jaata hai (0.038 + 0.049 ≈ 0.085).</figcaption></figure>
+  <div class="cols2">
+  <div class="box warn"><span class="k">Sach baat</span><p>Ye <b>ek seed aur sirf 500 iterations</b> hain. Fark chhota hai, aur alag seed pe kitna hilta hai ye naapa nahi gaya. Ye bhi nahi pata ki 4000 iterations ke baad fark bachta hai. Isliye main model abhi baseline hi hai.</p></div>
+  <div class="box say"><span class="k">Interview mein bolo</span><p style="font-size:9.4pt">"I compared against the source of nanoGPT, nanochat and minimind. I took two ideas from nanochat, QK norm and zero-init projections, and ran an ablation: together they improved validation loss by 0.085 at 500 iterations. It's one seed and a short run, so it's a promising signal, not a proven result."</p></div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">11</div><div><h2>Saare {{N_TERMS}} concepts</h2><div class="file">beginner se advanced · {{N_CODED}} ke saath code ki jagah, {{N_THEORY}} sirf theory</div></div></div>
+  <p class="lead">Har term ke saamne file aur wo naam hai jo us file mein search karna hai. "theory" wale terms is project ke code mein nahi hain, par interview mein pooche jaate hain.</p>
+  {{GLOSSARY}}
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">12</div><div><h2>Interview: sawaal aur jawab</h2><div class="file">"BOLO" wali line English mein seedhe boli ja sakti hai</div></div></div>
+  <div class="box say"><span class="k">30 second ka pitch</span><p>"I built a decoder-only transformer from scratch in PyTorch to really understand how LLMs work. I wrote my own byte-level BPE tokenizer, multi-head causal self-attention with RoPE, RMSNorm and SwiGLU, and a training loop with AdamW, warmup, cosine decay and gradient clipping. I trained a 12 million parameter model on Hindi, Marathi and Hinglish, taking loss from 8.37 to 1.88. Then I added a KV cache, LoRA fine-tuning and int8 quantization, and wrote tests for causality and cache correctness."</p></div>
+
+  <h3>A. Buniyaad</h3>
+  <div class="qa"><div class="q">LLM asal mein kya karta hai?</div><div class="en">It predicts a probability distribution over the next token given all previous tokens. Text is generated by sampling one token and feeding it back in.</div><p class="hi">Bas agla token. Baaki sab (jawab dena, kahani likhna) isi ko baar-baar chalane se aata hai.</p></div>
+  <div class="qa"><div class="q">Token kya hai? Shabd kyun nahi use karte?</div><div class="en">A token is a subword unit. Word-level needs a huge vocabulary and fails on unseen words; character-level makes sequences too long. Subwords are the trade-off.</div><p class="hi">Aam shabd ek token, mushkil shabd tukdon mein. Naya shabd bhi purane tukdon se ban jaata hai.</p></div>
+  <div class="qa"><div class="q">BPE kaise kaam karta hai?</div><div class="en">Start with bytes as the vocabulary, repeatedly merge the most frequent adjacent pair into a new token until you reach the target vocabulary size.</div><p class="hi">Hamne 3,835 merges kiye. Encode karte waqt merges usi order mein lagte hain jis order mein seekhe gaye.</p></div>
+  <div class="qa"><div class="q">Embedding kya hai?</div><div class="en">A learned lookup table that maps each token id to a dense vector. Tokens used in similar contexts end up with similar vectors.</div><p class="hi">4096 × 384 ki ek table. Row number = token id.</p></div>
+
+  <h3>B. Attention</h3>
+  <div class="qa"><div class="q">Self-attention samjhao.</div><div class="en">Each token builds a query, a key and a value. The score between two tokens is the dot product of one's query and the other's key. Softmax turns scores into weights, and the output is the weighted sum of values.</div><p class="hi">Query = sawaal, key = label, value = maal. Jiski key meri query se mile, uska maal mujhe zyada.</p></div>
+  <div class="qa"><div class="q">√d se bhaag kyun dete hain?</div><div class="en">Dot products grow with dimension. Large scores push softmax into saturation where gradients vanish. Scaling keeps the variance around one.</div><p class="hi">Bina iske softmax ek hi token ko sab kuch de deta hai aur seekhna ruk jaata hai.</p></div>
+  <div class="qa"><div class="q">Multi-head kyun?</div><div class="en">One head can only express one attention pattern. Multiple heads let the model attend to different relations in parallel at the same total cost.</div><p class="hi">Hamare 6 heads, har ek 64 dimension ka. 6 × 64 = 384.</p></div>
+  <div class="qa"><div class="q">Causal mask kyun zaroori hai?</div><div class="en">It stops a position from seeing future tokens. That lets us train on every position of a sequence in one forward pass without leaking the answer.</div><p class="hi">Bina mask ke model agla token dekh ke copy kar leta, kuch nahi seekhta. Hamara test ise check karta hai.</p></div>
+  <div class="qa"><div class="q">Position ki jaankari kaise dete ho? RoPE kya hai?</div><div class="en">Attention is permutation-invariant, so position must be injected. RoPE rotates query and key vectors by an angle proportional to position, so their dot product depends only on relative distance.</div><p class="hi">Purana tareeka: har position ka seekha hua vector jodna. RoPE mein alag table nahi chahiye.</p></div>
+  <div class="qa"><div class="q">Attention ki complexity kya hai?</div><div class="en">Quadratic in sequence length, O(T²), because every token attends to every earlier token. That is why context windows are expensive.</div><p class="hi">256 tokens = 65,536 pair. 2,560 tokens = 100 guna zyada.</p></div>
+
+  <h3>C. Architecture</h3>
+  <div class="qa"><div class="q">Residual connection kyun?</div><div class="en">It gives gradients a direct path through the network, so deep stacks train. Each block only has to learn a correction to its input.</div><p class="hi"><code>x = x + f(x)</code>. Bina iske 6 layers ke baad gradient lagbhag gayab ho jaata.</p></div>
+  <div class="qa"><div class="q">Normalization kyun? Pre-norm aur post-norm mein fark?</div><div class="en">Normalization keeps activation scale stable. Pre-norm applies it before each sub-layer so the residual path stays an identity, which trains more stably than the original post-norm.</div><p class="hi">Hamne RMSNorm liya: LayerNorm bina mean aur bias ke.</p></div>
+  <div class="qa"><div class="q">Feed-forward layer ka kya kaam hai?</div><div class="en">Attention mixes information across tokens; the feed-forward layer transforms each token independently. It holds most of the parameters.</div><p class="hi">Hamare model mein 7.08 M of 12.2 M parameters feed-forward mein hain.</p></div>
+  <div class="qa"><div class="q">Weight tying kya hai?</div><div class="en">The input embedding and the output projection share one matrix. It saves parameters and usually helps small models.</div><p class="hi">1.57 M parameters bache. nanochat ise nahi karta, kyunki bade model mein alag rakhna behtar nikla.</p></div>
+  <div class="qa"><div class="q">GPT aur BERT mein fark?</div><div class="en">GPT is decoder-only with causal attention, trained to predict the next token, so it generates. BERT is encoder-only with bidirectional attention, trained on masked tokens, so it is for understanding.</div><p class="hi">Hamara model GPT jaisa hai. STT ke module mein encoder milega.</p></div>
+
+  <h3>D. Training</h3>
+  <div class="qa"><div class="q">Loss function kya hai?</div><div class="en">Cross-entropy: the negative log probability the model assigned to the correct next token, averaged over all positions.</div><p class="hi">Sahi token ko 90% diya to loss 0.1; 1% diya to 4.6.</p></div>
+  <div class="qa"><div class="q">Training shuru karte hi kya check karte ho?</div><div class="en">That the initial loss is about ln of the vocabulary size. For 4096 that is 8.32, and I got 8.37. If it is far off, there is a bug in the model or the data.</div><p class="hi">Sabse sasta aur sabse kaam ka check.</p></div>
+  <div class="qa"><div class="q">Perplexity kya hai?</div><div class="en">The exponential of the loss. It reads as the effective number of choices the model is uncertain between. Mine is 6.5.</div><p class="hi">Random model ka 4,096 hota.</p></div>
+  <div class="qa"><div class="q">AdamW kyun, SGD kyun nahi?</div><div class="en">Adam keeps a per-parameter step size from running gradient statistics, which transformers need because gradient scales differ a lot between layers. The W means weight decay is applied directly to the weights instead of through the gradient.</div><p class="hi">Weight decay sirf matrices pe lagaya, norm ke gains pe nahi.</p></div>
+  <div class="qa"><div class="q">Warmup aur cosine decay kyun?</div><div class="en">Early gradients from a random network are noisy, so we ramp the learning rate up. Then we decay it so the model settles into a minimum instead of bouncing around.</div><p class="hi">200 step warmup, phir 6e-4 se 6e-5 tak.</p></div>
+  <div class="qa"><div class="q">Overfitting kaise pakdi?</div><div class="en">I hold out 2% of documents and compare training and validation loss. If training keeps dropping while validation rises, it is memorizing. In my run the gap stayed at 0.19.</div><p class="hi">Aur sabse achhe val loss wala checkpoint hi save hota hai.</p></div>
+
+  <h3>E. Inference</h3>
+  <div class="qa"><div class="q">Temperature, top-k, top-p samjhao.</div><div class="en">Temperature rescales logits to make the distribution sharper or flatter. Top-k keeps the k most likely tokens. Top-p keeps the smallest set whose cumulative probability reaches p, so it adapts to the model's confidence.</div><p class="hi">Chapter 6 ka chart dekho: wahi prompt, teen temperature.</p></div>
+  <div class="qa"><div class="q">KV cache kya hai?</div><div class="en">During generation the keys and values of earlier tokens never change, so we cache them and only process the new token. It turns each step from re-reading the whole sequence into one token's work.</div><p class="hi">Is machine pe {{KV_X}}x tez, aur test ye pakka karta hai ki output wahi hai.</p></div>
+  <div class="qa"><div class="q">Model galat baat kyun bolta hai (hallucination)?</div><div class="en">It is trained to produce likely text, not true text. It has no mechanism to check facts, so a fluent wrong continuation is as valid to it as a correct one.</div><p class="hi">Hamare model mein ye saaf dikhta hai: grammar sahi, kahani ka logic toota hua.</p></div>
+
+  <h3>F. Fine-tuning aur deployment</h3>
+  <div class="qa"><div class="q">LoRA kya hai? Full fine-tuning se behtar kyun?</div><div class="en">LoRA freezes the base weights and trains a low-rank update. It needs far less memory and storage, and one base model can serve many small adapters.</div><p class="hi">Hamara adapter 0.45 MB, poora model 48.8 MB.</p></div>
+  <div class="qa"><div class="q">LoRA mein B ko zero se kyun shuru karte hain?</div><div class="en">So that B times A is zero at the start and the model behaves exactly like the pretrained one. Training then moves away from that smoothly.</div><p class="hi">Hamara test: naya adapter lagane pe output bilkul same.</p></div>
+  <div class="qa"><div class="q">Catastrophic forgetting kya hai? Tumne dekha?</div><div class="en">When fine-tuning on new data damages what the model already knew. I saw general validation loss rise from 2.70 to 3.19, and reduced it by mixing a batch of original data into each step.</div><p class="hi">Is technique ko replay ya rehearsal kehte hain.</p></div>
+  <div class="qa"><div class="q">Quantization kya hai? Kitna nuksaan hua?</div><div class="en">Storing weights in fewer bits. int8 cost nothing on my model, 4-bit per-channel cost 0.03 in loss, and 2-bit collapsed.</div><p class="hi">Per-channel = har row ka apna scale. 4-bit pe ye per-tensor se 4 guna behtar tha.</p></div>
+
+  <h3>G. Project ke baare mein</h3>
+  <div class="qa"><div class="q">Kaise pata ki tumhara code sahi hai?</div><div class="en">I wrote tests for the properties that must hold: changing a future token does not change earlier logits, the KV cache gives identical logits to a full pass, my cross-entropy matches PyTorch's, and a fresh LoRA adapter is a no-op.</div><p class="hi">Loss girna kaafi nahi; galat model bhi kuch na kuch seekh leta hai.</p></div>
+  <div class="qa"><div class="q">Sabse mushkil ya dilchasp bug kaunsa tha?</div><div class="en">Quantization showed zero change in loss, which looked like a bug. I measured the actual weight error and found int8 was only about 1% off, so the result was real. I then pushed to 4, 3 and 2 bits to find where it breaks.</div><p class="hi">Seekh: "kuch nahi badla" ko pehle shak se dekho, phir naap ke maano.</p></div>
+  <div class="qa"><div class="q">nanoGPT se alag kya kiya?</div><div class="en">nanoGPT reproduces GPT-2. Mine uses the modern stack: RoPE, RMSNorm, SwiGLU. I also wrote the tokenizer, added language control tokens for Hindi, Marathi and Hinglish, a KV cache, LoRA, quantization measurements and an attention inspector.</div><p class="hi">Aur ek ablation study jo nanochat ke do ideas ko naapti hai.</p></div>
+  <div class="qa"><div class="q">Kya ye production mein use ho sakta hai?</div><div class="en">No. With 12 million parameters and 11 million tokens it writes simple stories and short chat, not facts or reasoning. Its purpose was understanding. For real use I would fine-tune an existing model.</div><p class="hi">Ye sachcha jawab hai, aur ye tumhe samajhdaar dikhata hai.</p></div>
+  <div class="qa"><div class="q">Aage kya karoge?</div><div class="en">Run the QK-norm and zero-init variant for the full length with multiple seeds, add more data since validation loss was still falling, add a chat fine-tuning stage with role tokens, and build a fixed evaluation set beyond loss.</div><p class="hi">Phir STT, TTS aur orchestration, isi tarah scratch se.</p></div>
+</section>
+
+<section class="page">
+  <div class="chap"><div class="n">13</div><div><h2>Ek page ki cheat sheet</h2><div class="file">interview se 5 minute pehle</div></div></div>
+  <div class="tiles">
+    <div class="tile"><b>12.2 M</b><span>parameters</span></div>
+    <div class="tile"><b>6 / 6 / 384</b><span>layers / heads / width</span></div>
+    <div class="tile"><b>256</b><span>context window</span></div>
+    <div class="tile"><b>4,096</b><span>vocab (byte-level BPE)</span></div>
+    <div class="tile"><b>10.9 M</b><span>train tokens, 4.5 epochs</span></div>
+    <div class="tile"><b>1.88</b><span>val loss (shuru 8.37, ln 4096 = 8.32)</span></div>
+    <div class="tile"><b>6.5</b><span>val perplexity</span></div>
+    <div class="tile"><b>~50 min</b><span>M1 Pro ke GPU pe</span></div>
+    <div class="tile"><b>{{KV_X}}x</b><span>KV cache se speed</span></div>
+    <div class="tile"><b>0.91%</b><span>LoRA mein train hue weights</span></div>
+    <div class="tile"><b>12 MB</b><span>int8 mein (fp32: 49 MB), loss mein fark 0</span></div>
+    <div class="tile"><b>−0.085</b><span>QK norm + zero-init (500 iter, 1 seed)</span></div>
+  </div>
+  <h3>Paanch line jo yaad rakhni hain</h3>
+  <ul>
+    <li><b>LLM</b> = agle token ki probability. Text = ise baar-baar chalana.</li>
+    <li><b>Attention</b> = softmax(Q·K / √d) × V, future pe mask ke saath.</li>
+    <li><b>Block</b> = x + attention(norm(x)), phir x + feed_forward(norm(x)).</li>
+    <li><b>Training</b> = cross-entropy + AdamW + warmup/cosine + clipping, val loss pe nazar.</li>
+    <li><b>Deploy</b> = KV cache (tez), LoRA (sasta fine-tune), quantization (chhota).</li>
+  </ul>
+  <h3>Khud chalao</h3>
+  <table>
+    <thead><tr><th>Kya dekhna hai</th><th>Command (folder: <code>scratch/llm</code>)</th></tr></thead>
+    <tbody>
+      <tr><td>Saare tests</td><td><code>python check.py</code></td></tr>
+      <tr><td>Hindi kahani</td><td><code>python generate.py --lang hi --prompt "एक दिन"</code></td></tr>
+      <tr><td>Hinglish chat</td><td><code>python generate.py --lang hing --chat --prompt "kya haal hai?"</code></td></tr>
+      <tr><td>Model ke andar</td><td><code>python xray.py --lang hi --prompt "एक दिन राजू ने"</code></td></tr>
+      <tr><td>Ye guide dobara banao</td><td><code>python docs/build.py</code></td></tr>
+    </tbody>
+  </table>
+  <div class="cols2">
+  <div class="box good"><span class="k">Sabse achhi tayyari</span><p style="font-size:9.4pt">Padhna kaafi nahi. <code>autograd.py</code> mein learning rate badha kar dekho. <code>model.py</code> mein mask hata kar <code>check.py</code> chalao aur dekho kaunsa test fail hota hai. Jo cheez khud todi hai, wo yaad rehti hai.</p></div>
+  <div class="box warn"><span class="k">Is model ki seema</span><p style="font-size:9.4pt">Chhota (12 M), kam data (11 M tokens, machine ki likhi kahaniyan), 256 tokens tak, facts nahi jaanta, ablation ek seed ka. Ye sab bolna theek hai: maksad samajhna tha.</p></div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

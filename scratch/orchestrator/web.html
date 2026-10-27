@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Own Voice Test</title>
+<style>
+  :root { --bg:#f7f6f3; --card:#fff; --ink:#1f1e1c; --mute:#6b6a66; --line:#e4e2dd; --acc:#c2410c; --ok:#15803d; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151514; --card:#1f1f1d; --ink:#ecebe8; --mute:#9d9b96; --line:#33322f; --acc:#fb923c; --ok:#4ade80; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  h1 { font-size:22px; margin:0 0 4px; } .sub { color:var(--mute); margin:0 0 20px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  button { font:inherit; border:0; border-radius:8px; padding:10px 16px; background:var(--acc); color:#fff; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:wait; }
+  #talk.rec { background:var(--ok); }
+  select, textarea, input { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px; }
+  textarea { width:100%; min-height:70px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:10px; }
+  .log > div { border-top:1px solid var(--line); padding:10px 0; }
+  .who { color:var(--mute); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .ms { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .ms span { font:12px ui-monospace, monospace; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:2px 6px; }
+  .err { color:#dc2626; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Own Voice: poora pipeline</h1>
+  <p class="sub">Sab models hamare apne, sab Mac CPU pe: STT (158 h) → LLM (scratch) → TTS (flow 24 kHz / purana).</p>
+
+  <section>
+    <h2>Awaaz (flow TTS, dono panel ke liye)</h2>
+    <div class="row">
+      <label>awaaz <select id="speaker"></select></label>
+      <label>style <select id="style"></select></label>
+      <label>guidance <input id="guidance" type="number" value="1" min="1" max="4" step="0.5" style="width:70px"></label>
+    </div>
+    <p class="sub" style="margin:0">Ye sirf Devanagari (Hindi / Marathi) text pe lagta hai. Roman / Hinglish text purana 22 kHz model bolta hai: Rasa data mein Hinglish nahi tha.</p>
+  </section>
+
+  <section>
+    <h2>1. Bolo aur jawab suno (STT → LLM → TTS)</h2>
+    <div class="row">
+      <label>LLM <select id="llm">
+        <option value="echo">echo: jo suna wahi wapas (naye flow TTS se, upar wali awaaz)</option>
+        <option value="scratch">scratch LLM: Hinglish jawab (purani 22 kHz awaaz)</option>
+      </select></label>
+    </div>
+    <div class="row"><button id="talk">● Record shuru</button></div>
+    <p class="sub" id="status">Click karo, Hindi ya Marathi mein ek vaakya bolo, phir dobara click karo.</p>
+    <div class="log" id="log"></div>
+  </section>
+
+  <section>
+    <h2>2. Sirf TTS</h2>
+    <textarea id="text">आज मौसम बहुत अच्छा है, चलो बाहर घूमने चलते हैं।</textarea>
+    <div class="row"><button id="say">Bolo</button><span id="sayout" class="sub"></span></div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let playing = [];  // one reply at a time: a new one stops the old one
+const play = list => { playing.forEach(a => { a.onended = null; a.pause(); });
+  playing = list.map(b => new Audio("data:audio/wav;base64," + b));
+  playing.forEach((a, i) => { if (playing[i + 1]) a.onended = () => playing[i + 1].play(); });
+  if (playing[0]) playing[0].play(); };
+const voice = () => ({ speaker: $("speaker").value, style: $("style").value, guidance: $("guidance").value });
+
+async function post(url, body, type) {
+  const r = await fetch(url, { method: "POST", body, headers: { "Content-Type": type } });
+  const j = await r.json(); if (j.error) throw new Error(j.error); return j;
+}
+
+fetch("/voices").then(r => r.json()).then(v => {
+  $("speaker").innerHTML = v.speakers.map(s => `<option>${s}</option>`).join("");
+  $("style").innerHTML = v.styles.map(s => `<option ${s === "conv" ? "selected" : ""}>${s}</option>`).join("");
+});
+
+// Click to start, click to stop. Then resample to 16 kHz mono float32, which is what the STT takes.
+let rec, chunks, stream;
+async function toggle() {
+  if (rec && rec.state === "recording") { rec.stop(); return; }
+  try {
+    stream = stream || await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  } catch (e) { $("status").innerHTML = `<span class="err">Mic nahi mila: ${e.message}</span>`; return; }
+  chunks = []; rec = new MediaRecorder(stream); rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = send; rec.start(); $("talk").classList.add("rec"); $("talk").textContent = "■ Record band karo";
+  $("status").textContent = "Sun raha hoon ... bolke dobara click karo.";
+}
+
+async function send() {
+  $("talk").classList.remove("rec"); $("talk").textContent = "● Record shuru"; $("talk").disabled = true;
+  $("status").textContent = "Pipeline chal raha hai (asli speed pe, kuch second) ...";
+  try {
+    const buf = await new Blob(chunks).arrayBuffer();
+    const decoded = await new AudioContext().decodeAudioData(buf);
+    const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * 16000), 16000);
+    const src = off.createBufferSource(); src.buffer = decoded; src.connect(off.destination); src.start();
+    const pcm = (await off.startRendering()).getChannelData(0);
+    const j = await post("/turn?" + new URLSearchParams({ llm: $("llm").value, ...voice() }), pcm.buffer, "application/octet-stream");
+    const ms = Object.entries(j.ms).map(([k, v]) => `<span>${k.replace("_ms", "").replace("_", " ")} ${v} ms</span>`).join("");
+    const div = document.createElement("div");
+    div.innerHTML = `<div class="who">aapne kaha (STT) · ${j.seconds} s recording</div><div>${j.user || "—"}</div>
+      <div class="who" style="margin-top:6px">agent · LLM ${j.llm} · TTS ${j.tts.join(", ") || "—"}</div><div>${j.reply}</div><div class="ms">${ms}</div>`;
+    $("log").prepend(div); play(j.audio); $("status").textContent = "Ho gaya. Phir se click karke bolo.";
+  } catch (e) { $("status").innerHTML = `<span class="err">${e.message}</span>`; }
+  $("talk").disabled = false;
+}
+$("talk").onclick = toggle;
+
+$("say").onclick = async () => {
+  play([]);  // stop the previous voice now, so the next one heard is the new choice
+  $("say").disabled = true; $("sayout").textContent = "bana raha hai ...";
+  try {
+    const t0 = performance.now();
+    const j = await post("/speak", JSON.stringify({ text: $("text").value, ...voice() }), "application/json");
+    const v = voice();
+    $("sayout").textContent = `${Math.round(performance.now() - t0)} ms · ${j.rate === 24000 ? `flow 24 kHz, ${v.speaker}, ${v.style}, guidance ${v.guidance}` : "purana 22 kHz (Roman text: awaaz dropdown nahi lagta)"} · pitch ~${j.pitch} Hz`;
+    play(j.audio);
+  } catch (e) { $("sayout").innerHTML = `<span class="err">${e.message}</span>`; }
+  $("say").disabled = false;
+};
+</script>
+</body>
+</html>
